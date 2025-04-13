@@ -21,7 +21,7 @@ class PostController extends Controller
             $query->where('title', 'like', '%' . $searchKeyword . '%');
         }
 
-        $posts=$query->paginate(3);
+        $posts=$query->paginate(10);
         return view('posts.index', compact('posts'));
     }
 
@@ -60,7 +60,7 @@ class PostController extends Controller
     public function show(string $id)
     {    
         $post=Post::with('comments.user')->findOrFail($id);
-        $comments=$post->comments()->with('user','likes')->paginate(3);
+        $comments=$post->comments()->with('user','likes')->paginate(10);
         return view('posts.show',compact('post','comments'));
     }
 

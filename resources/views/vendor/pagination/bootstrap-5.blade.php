@@ -31,7 +31,7 @@
             <div>
                 {{-- 4件中1～3の3件表示しています --}}
                 <p class="small text-muted">
-                    {!! __(':total 件中 :start～:end の :count 件表示しています。', [
+                    {!! __(':total 件中 :start～:end ~ :count 件表示', [
                         'total' => $paginator->total(),
                         'start' => $paginator->firstItem(),
                         'end' => $paginator->lastItem(),

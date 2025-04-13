@@ -22,16 +22,21 @@
     @foreach ($comments as $comment)
         <div class="card mb-2">
             <div class="card-body">
-                <p class="card-text">{{ $comment->content }}</p>
-                <p class="text-muted">投稿者: {{ $comment->user->name }}| 投稿日時:{{ $comment->created_at->format('Y-m-d H:i') }}
+                <p class="text-muted fs-6">投稿者: {{ $comment->nickname }}|
+                    投稿日時:{{ $comment->created_at->format('Y-m-d H:i') }}
                 </p>
-                <form action="{{ route('comments.like', $comment->id) }}" method="POST" style="display:inline">
-                    @csrf
-                    <button type="submit"
-                        class="btn {{ $comment->likes->contains('user_id', auth()->id()) ? 'btn-danger' : 'btn-outline-danger' }}">
-                        <i class="bi bi-heart"></i>
-                    </button>
-                </form>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="card-text mb-0" style="max-width: 80%">{{ $comment->content }}</p>
+                    <form action="{{ route('comments.like', $comment->id) }}" method="POST" style="margin-left: 10px;">
+                        @csrf
+                        <button type="submit"
+                            class="btn  {{ $comment->likes->contains('user_id', auth()->id()) ? 'btn-danger' : 'btn-outline-danger' }}"
+                            style="font-size: 10px;">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                        <span class="like-count">{{ $comment->likes->count() }}</span>
+                    </form>
+                </div>
             </div>
 
         </div>
@@ -40,10 +45,12 @@
     <!--コメントフォーム-->
 
     <h3>コメントを投稿する</h3>
-    @if (auth()->check() && auth()->id() === $post->user_id)
+    @if (auth()->check())
         <form action="{{ route('comments.store', $post->id) }}" method="POST">
             @csrf
             <div class="mb-3">
+                <label for="nickname" class="nickname-label">名前</label>
+                <input type="text" id="nickname" name="nickname" class="form-control">
                 <label for="content" class="form-label">コメント内容</label>
                 <textarea name="content" id="content" class="form-control" rows="3" required></textarea>
             </div>

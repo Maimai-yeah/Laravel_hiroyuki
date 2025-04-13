@@ -36,7 +36,7 @@ class LikeController extends Controller
         if($like->exists()) {
             $like->delete();
         }else {
-            $comment->likes()->create(['user_id' =>$user->id,'post_id'=>$comment->post_id]);
+            $comment->likes()->create(['user_id' =>$user->id]);
         }
 
         return redirect()->back();
