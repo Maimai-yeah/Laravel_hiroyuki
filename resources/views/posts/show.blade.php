@@ -22,19 +22,21 @@
     @foreach ($comments as $comment)
         <div class="card mb-2">
             <div class="card-body">
-                <p class="text-muted fs-6">投稿者: {{ $comment->nickname }}|
+                <p class="text-muted fs-6">{{ $comment->position }} 投稿者: {{ $comment->nickname }}|
                     投稿日時:{{ $comment->created_at->format('Y-m-d H:i') }}
                 </p>
                 <div class="d-flex justify-content-between align-items-center">
                     <p class="card-text mb-0" style="max-width: 80%">{{ $comment->content }}</p>
                     <form action="{{ route('comments.like', $comment->id) }}" method="POST" style="margin-left: 10px;">
                         @csrf
-                        <button type="submit"
+                        <!-- ボタンの部分 -->
+                        <button type="button"
                             class="btn  {{ $comment->likes->contains('user_id', auth()->id()) ? 'btn-danger' : 'btn-outline-danger' }}"
-                            style="font-size: 10px;">
+                            id="like-button-{{ $comment->id }}" style="font-size: 10px;">
                             <i class="bi bi-heart"></i>
                         </button>
-                        <span class="like-count">{{ $comment->likes->count() }}</span>
+                        <span class="like-count" id="like-count-{{ $comment->id }}">{{ $comment->likes->count() }}</span>
+
                     </form>
                 </div>
             </div>
@@ -63,3 +65,50 @@
         {{ $comments->links() }}
     </div>
 @endsection
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const likeButtons = document.querySelectorAll('.btn-outline-danger, .btn-danger');
+
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const commentId = this.id.replace('like-button-', '');
+
+                    fetch(`/comments/${commentId}/toggle-like`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({})
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                alert(data.error);
+                                return;
+                            }
+
+                            const button = document.getElementById(`like-button-${commentId}`);
+                            const likeCount = document.getElementById(
+                            `like-count-${commentId}`);
+
+                            if (data.action === 'added') {
+                                button.classList.remove('btn-outline-danger');
+                                button.classList.add('btn-danger');
+                            } else {
+                                button.classList.remove('btn-danger');
+                                button.classList.add('btn-outline-danger');
+                            }
+
+                            likeCount.textContent = data.likeCount;
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            });
+        });
+    </script>
+@endpush

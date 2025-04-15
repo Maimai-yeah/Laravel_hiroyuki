@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('content');
             $table->string('nickname')->nullable();
             $table->timestamps();
+            $table->unsignedInteger('position');
         });
     }
 

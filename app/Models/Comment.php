@@ -14,8 +14,18 @@ class Comment extends Model
         'post_id',
         'user_id',
         'content',
-        'nickname'
+        'nickname',
+        'position'
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($comment) {
+            if ($comment->position === null) {
+                $comment->position = 0; // デフォルト値を設定
+            }
+        });
+    }
 
     public function post()
     {

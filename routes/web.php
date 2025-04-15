@@ -25,5 +25,5 @@ Route::resource('posts',PostController::class);
 //コメントを投稿するルーティング
 Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 //いいねを投稿するルーティング
-Route::post('/comments/{comment}/likes', [LikeController::class, 'toggleLike'])->name('comments.like')->middleware('auth');
+Route::post('/comments/{comment}/toggle-like', [LikeController::class, 'toggleLike'])->name('comments.like')->middleware('auth');
 require __DIR__.'/auth.php';
