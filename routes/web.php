@@ -5,11 +5,10 @@ use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CardlistController;
 use App\Models\Like;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PostController::class, 'index'])->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -27,3 +26,8 @@ Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name
 //いいねを投稿するルーティング
 Route::post('/comments/{comment}/toggle-like', [LikeController::class, 'toggleLike'])->name('comments.like')->middleware('auth');
 require __DIR__.'/auth.php';
+
+//カードリストのルーティング
+Route::get('/cardlist', [CardlistController::class, 'cardlist'])->name('posts.cardlist');
+//カードリスト検索機能のルーティング
+Route::get('/card-info/{id}', [CardlistController::class, 'getCardInfo']);

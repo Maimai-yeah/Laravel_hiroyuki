@@ -1,0 +1,79 @@
+body,
+li {
+    list-style-type: none;
+}
+.footer {
+    background: #a18904;
+    position: static;
+    padding: 1rem 0;
+    height: auto;
+    color: #fff;
+}
+footer a {
+    color: inherit; /* 親要素の色を継承する */
+    text-decoration: none; /* 下線を消す */
+}
+
+.tool-item {
+    width: 32.5%;
+    height: 100px;
+}
+.tool-menu-list {
+    margin: 0; /* 親要素の外側の余白をゼロに */
+    padding: 0; /* 親要素の内側の余白をゼロに */
+}
+.main-articles h3 {
+    background: #fff;
+    padding: 8px 10px;
+    font-size: 16px;
+    border-left: 6px solid #87cefa;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+a {
+    text-decoration: none;
+}
+.widget-box {
+    border: 1px solid #aaa;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    overflow: hidden;
+}
+.card-item-area .card-item-area-inner {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 30px 10px;
+}
+.card-item-area img {
+    cursor: pointer;
+}
+
+.card-leader-list {
+    display: flex; /* 横並びにするためにフレックスボックスを使用 */
+    justify-content: start; /* 左揃え */
+    gap: 10px; /* 画像間のスペースを指定 */
+    flex-wrap: wrap; /* 画像が画面の幅を超えると改行されるように */
+    margin: 0; /* ul のデフォルトのマージンをリセット */
+    padding: 0; /* ul のデフォルトのパディングをリセット */
+}
+
+.card-leader {
+    width: 100px; /* 画像の幅を指定（例：100px） */
+    height: auto; /* 高さを自動調整してアスペクト比を保つ */
+}
+
+/* カードをクリックしたときに表示されるモーダル */
+.modal-dialog {
+    max-width: 350px;
+    margin: 10% auto;
+    position: relative;
+}
+
+.modal-content {
+    max-height: 700px;
+    overflow-y: auto;
+    border-radius: 1rem; /* ここで丸み */
+}
