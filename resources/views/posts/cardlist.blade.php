@@ -67,6 +67,8 @@
                                 <input type="hidden" name="version" value="{{ request('version') }}">
                                 <input type="hidden" name="cost" value="{{ request('cost') }}">
                                 <input type="hidden" name="rarity" value="{{ request('rarity') }}">
+                                <input type="hidden" name="card_type" value="{{ request('card_type') }}">
+
                             </form>
 
                             <p class="text-start text-muted">
@@ -84,7 +86,7 @@
                                                             class="img-fluid" />
                                                     </figure>
                                                     <div class="mt-2">
-                                                        <!-- <h5>{{ $card->name }}</h5> -->
+                                                        <!-- <p>{{ $card->name }}</p> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -114,23 +116,21 @@
             </div>
         </div>
 
-        <!-- カード詳細のモーダル（ポップアップ） -->
+        <!-- カード詳細モーダル -->
         <div class="modal fade" id="cardModal" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-sm d-flex align-items-center justify-content-center"
+                style="max-width: 400px; margin-top: 10vh;"> <!-- 少し小さめに調整 -->
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="cardModalLabel">カード詳細</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
                     </div>
-                    <div class="modal-body">
-                        <div class="card-detail">
+                    <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+                        <div class="card-detail text-center">
                             <figure>
-                                <img id="modalCardImage" src="" alt="" class="img-fluid">
+                                <img id="modalCardImage" src="" alt="カード画像" class="img-fluid"
+                                    style="max-width: 100%; max-height: 300px;"> <!-- 画像サイズ制限 -->
                             </figure>
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <button id="prevCardButton" class="btn btn-outline-secondary btn-sm">← 前のカード</button>
-                                <button id="nextCardButton" class="btn btn-outline-primary btn-sm">次のカード →</button>
-                            </div>
                             <h5 id="modalCardName"></h5>
                             <p><strong>効果:</strong> <span id="modalCardEffect"></span></p>
                             <p><strong>クラス:</strong> <span id="modalCardClass"></span></p>
@@ -145,6 +145,7 @@
                 </div>
             </div>
         </div>
+
         <!-- カード検索のモーダル -->
         <div class="modal fade" id="cardSearchModal" tabindex="-1" aria-labelledby="cardSearchModalLabel"
             aria-hidden="true">
@@ -161,13 +162,25 @@
                             <input type="text" class="form-control" id="searchName" name="name"
                                 value="{{ request('name') }}">
                         </div>
+                        <!-- カードタイプ -->
+                        <div class="mb-3">
+                            <label for="searchCardType" class="form-label">カードタイプ</label>
+                            <select class="form-select" id="searchCardType" name="card_type">
+                                <option value="">指定なし</option>
+                                @foreach (['フォロワー', 'スペル', 'アミュレット'] as $type)
+                                    <option value="{{ $type }}"
+                                        {{ request('card_type') == $type ? 'selected' : '' }}>{{ $type }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
 
                         <!-- クラス -->
                         <div class="mb-3">
                             <label for="searchClass" class="form-label">クラス</label>
                             <select class="form-select" id="searchClass" name="class">
                                 <option value="">指定なし</option>
-                                @foreach (['エルフ', 'ロイヤル', 'ウィッチ', 'ドラゴン', 'ネクロマンサー', 'ヴァンプ', 'ネメシス', 'ニュートラル'] as $class)
+                                @foreach (['エルフ', 'ロイヤル', 'ウィッチ', 'ドラゴン', 'ナイトメア', 'ビショップ', 'ネメシス', 'ニュートラル'] as $class)
                                     <option value="{{ $class }}"
                                         {{ request('class') == $class ? 'selected' : '' }}>{{ $class }}</option>
                                 @endforeach

@@ -67,13 +67,134 @@ a {
 
 /* カードをクリックしたときに表示されるモーダル */
 .modal-dialog {
-    max-width: 350px;
-    margin: 10% auto;
-    position: relative;
+    max-width: 90%; /* モーダルの最大幅を90%に設定 */
+    margin: 10% auto; /* 上下に10%のマージンを追加 */
 }
 
-.modal-content {
-    max-height: 700px;
-    overflow-y: auto;
-    border-radius: 1rem; /* ここで丸み */
+@media (min-width: 768px) {
+    .modal-dialog {
+        max-width: 70%; /* md以上の画面サイズでモーダルを少し狭くする */
+    }
+}
+
+.card-image-crop {
+    width: 100%;
+    aspect-ratio: 3 / 3; /* 縦横比を指定 */
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative; /* 名前を下に表示するために親要素にposition設定 */
+}
+
+.card-image-crop img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px; /* 内側の角丸 */
+    transition: transform 0.3s ease; /* ズームイン・ズームアウトのスムーズな効果 */
+    transform: scale(3.5); /* そもそもの拡大比率 */
+}
+
+.card-image-crop:hover img {
+    transform: scale(4); /* 画像をズームイン */
+}
+
+/* 画像の下部にリーダー名を追加 */
+.card-image-name {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明の背景 */
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 0 0 8px 8px; /* 角を丸く */
+}
+/*カードタイプ選択画面を調整したが、後々めんどくさくなる可能性のある変更*/
+.nav-item {
+    margin: 0;
+}
+
+.nav-link {
+    margin: 0;
+}
+
+/* 右下のカードアイコンのぴょんアニメーション */
+/* グレーアウト用のスタイル */
+.disabled {
+    opacity: 0.5; /* 半透明にして無効感を出す */
+    pointer-events: none; /* クリックできないようにする */
+}
+
+/* 右下のカードアイコンのぴょんアニメーション */
+.bounce {
+    animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-10px);
+    }
+    50% {
+        transform: translateY(0);
+    }
+}
+
+/* メッセージのスタイル */
+.message-alert {
+    position: fixed;
+    bottom: 100px; /* ボトムに表示 */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    z-index: 9999;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.deck-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(100px, 1fr)
+    ); /* 小さめ幅で詰める */
+    gap: 2px; /* 画像間の隙間を最小限に */
+}
+
+.deck-card {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.deck-card img {
+    width: 100%;
+    height: auto;
+    max-height: unset; /* 高さ制限を外す */
+    object-fit: cover;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.deck-card select,
+.deck-card button {
+    font-size: 11px;
+    padding: 2px 4px;
+    margin-top: 2px;
 }

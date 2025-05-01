@@ -18,6 +18,10 @@ class CardlistController extends Controller
     if ($request->filled('name')) {
         $query->where('name', 'like', '%' . $request->input('name') . '%');
     }
+    if ($request->filled('card_type')) {
+        $query->where('card_type', $request->input('card_type'));
+    }
+    
 
     if ($request->filled('class')) {
         $query->where('class', $request->input('class'));

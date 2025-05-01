@@ -48,4 +48,9 @@ class User extends Authenticatable
     public function comments() {
         return $this->hasMany(comment::class);
     }
+    public function decks()
+{
+    return $this->hasMany(\App\Models\Deck::class);
+}
+
 }

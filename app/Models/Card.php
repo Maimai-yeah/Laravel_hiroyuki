@@ -16,6 +16,14 @@ class Card extends Model
         'attack',
         'hp',
         'effect',
-        'evolved_name'
+        'evolved_name',
+        'card_type', 
     ];
+    public function decks()
+{
+    return $this->belongsToMany(Deck::class, 'deck_card')
+                ->withPivot('quantity')
+                ->withTimestamps();
+}
+
 }

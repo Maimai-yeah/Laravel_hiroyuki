@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CardlistController;
+use App\Http\Controllers\DecksimulatorController;
 use App\Models\Like;
 
 Route::get('/', [PostController::class, 'index'])->name('home');
@@ -31,3 +32,9 @@ require __DIR__.'/auth.php';
 Route::get('/cardlist', [CardlistController::class, 'cardlist'])->name('posts.cardlist');
 //カードリスト検索機能のルーティング
 Route::get('/card-info/{id}', [CardlistController::class, 'getCardInfo']);
+
+//デッキシミュレーターのルーティング
+Route::get('/leaderselect', [DecksimulatorController::class, 'leaderselect'])->name('posts.leaderselect');
+Route::get('/decksimulator', [DecksimulatorController::class, 'decksimulator'])->name('posts.decksimulator');
+
+Route::middleware('auth')->post('/save-deck', [DecksimulatorController::class, 'saveDeck'])->name('deck.save');

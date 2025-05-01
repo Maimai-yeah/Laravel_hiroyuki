@@ -23,7 +23,7 @@
 
                                         <!-- デッキシミュレータ -->
                                         <li class="tool-item border rounded flex-shrink-1 p-0" style="overflow: hidden;">
-                                            <a href="http://127.0.0.1:5500/SV-DeckSimurator.html"
+                                            <a href="{{ route('posts.leaderselect') }}"
                                                 class="btn btn-light w-100 h-100 d-flex flex-column justify-content-center align-items-center gap-1 text-center text-decoration-none">
                                                 <i class="mdi mdi-cards-playing-spade-multiple lh-1 text-info"
                                                     style="font-size: 45px;"></i>
