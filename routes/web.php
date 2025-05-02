@@ -7,7 +7,8 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CardlistController;
 use App\Http\Controllers\DecksimulatorController;
-use App\Http\Controllers\yourdeckController;
+use App\Http\Controllers\YourDeckController;
+use App\Http\Controllers\OurDeckController;
 use App\Models\Like;
 
 Route::get('/', [PostController::class, 'index'])->name('home');
@@ -46,4 +47,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/yourdeck', [YourDeckController::class, 'yourdeck'])->name('posts.yourdeck');
     Route::get('/yourdeck/{id}', [YourDeckController::class, 'show'])->name('yourdeck.show');
     Route::delete('/yourdeck/{id}', [YourDeckController::class, 'destroy'])->name('yourdeck.destroy');
+    Route::post('/yourdeck/{id}/share', [YourDeckController::class, 'shareDeck'])->name('yourdeck.share');
 });
+
+//皆のデッキのルーティング
+Route::get('/our-decks', [OurDeckController::class, 'index'])->name('posts.ourdeck');
+// routes/web.php
+// 共有を取り消す
+Route::post('/yourdeck/{id}/unshare', [YourDeckController::class, 'unshareDeck'])->name('yourdeck.unshare');
+
+

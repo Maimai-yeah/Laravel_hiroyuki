@@ -52,12 +52,12 @@
 
                                         <!-- みんなのデッキ -->
                                         <li class="tool-item border rounded flex-shrink-1 p-0" style="overflow: hidden;">
-                                            <div
+                                            <a href=""
                                                 class="btn btn-light w-100 h-100 d-flex flex-column justify-content-center align-items-center gap-1 text-center">
                                                 <i class="mdi mdi-cards-outline lh-1 text-info"
                                                     style="font-size: 45px;"></i>
                                                 <span class="text-dark small">みんなのデッキ</span>
-                                            </div>
+                                            </a>
                                         </li>
 
                                         <!-- おすすめデッキ -->

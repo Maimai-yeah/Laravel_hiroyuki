@@ -22,6 +22,12 @@
                         <span>あなたのデッキ</span>
                         <span class="ms-3 flex-grow-1 d-none d-md-block bg-light" style="height: 8px;"></span>
                     </h1>
+                    <p style="color: #6c757d; font-size: 14px; font-style: italic; margin-bottom: 0;">
+                        あなたが作ったデッキを見てみましょう。
+                    </p>
+                    <p style="color: #6c757d; font-size: 14px; font-style: italic; margin-top: 0;  margin-bottom: 0;">
+                        デッキを「みんなのデッキ」に投稿することもできます。
+                    </p>
                 </div>
             </div>
 
@@ -72,10 +78,25 @@
                                     <h5 class="card-title mb-1">{{ $deck->name }}</h5>
                                     <p class="text-muted mb-3">作成日: {{ $deck->created_at->format('Y/m/d') }}</p>
 
-                                    <!-- ボタン -->
-                                    <div class="d-flex gap-2"> <!-- gap-2でボタン同士の隙間を調整 -->
+                                    <!-- 共有ボタン -->
+                                    <div class="d-flex gap-1">
                                         <a href="{{ route('yourdeck.show', $deck->id) }}"
                                             class="btn btn-primary btn-sm">詳細</a>
+
+                                        <!-- 共有ボタン（切り替え） -->
+                                        <form
+                                            action="{{ route($deck->share ? 'yourdeck.unshare' : 'yourdeck.share', $deck->id) }}"
+                                            method="POST" class="d-inline" onsubmit="return confirmShare(event)">
+                                            @csrf
+                                            @if ($deck->share)
+                                                @method('POST')
+                                                <button type="submit" class="btn btn-secondary btn-sm">共有済み</button>
+                                            @else
+                                                <button type="submit" class="btn btn-success btn-sm">共有する</button>
+                                            @endif
+                                        </form>
+
+                                        <!-- 削除ボタン -->
                                         <form action="{{ route('yourdeck.destroy', $deck->id) }}" method="POST"
                                             class="d-inline" onsubmit="return confirm('本当に削除しますか？');">
                                             @csrf
@@ -83,7 +104,6 @@
                                             <button type="submit" class="btn btn-danger btn-sm">削除</button>
                                         </form>
                                     </div>
-
                                 </div>
 
                             </div>
@@ -114,4 +134,16 @@
             </div>
         </div>
     </main>
+
+    <!-- 共有ボタン確認用JavaScript -->
+    <script>
+        function confirmShare(event) {
+            const isShareAction = event.target.querySelector('button').innerText === '共有する';
+            const confirmationMessage = isShareAction ?
+                '本当にデッキを共有しますか？' :
+                '本当に共有を取り消しますか？';
+
+            return confirm(confirmationMessage);
+        }
+    </script>
 @endsection

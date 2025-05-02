@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Deck extends Model
 {
-    protected $fillable = ['name', 'class', 'user_id'];
+    protected $fillable = ['name', 'class', 'user_id', 'share'];  // 'share'カラムを追加
 
     public function user()
     {
@@ -20,3 +20,4 @@ class Deck extends Model
                     ->withTimestamps();
     }
 }
+

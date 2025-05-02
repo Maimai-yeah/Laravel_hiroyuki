@@ -42,4 +42,39 @@ public function destroy($id)
 
     return redirect()->route('posts.yourdeck')->with('success', 'デッキを削除しました。');
 }
+public function shareDeck($id)
+{
+    $deck = Deck::findOrFail($id);
+    
+    if ($deck->user_id !== auth()->id()) {
+        return redirect()->back()->with('error', '権限がありません');
+    }
+
+    try {
+        // デッキを公開状態にする
+        $deck->update(['share' => true]);
+        return redirect()->route('posts.yourdeck')->with('success', 'デッキが共有されました');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'デッキの共有に失敗しました。');
+    }
+}
+public function unshareDeck($id)
+{
+    $deck = Deck::findOrFail($id);
+
+    // デッキの所有者か確認
+    if ($deck->user_id !== auth()->id()) {
+        return redirect()->back()->with('error', '権限がありません');
+    }
+
+    try {
+        // 共有を取り消し（shareをfalseにする）
+        $deck->update(['share' => false]);
+        return redirect()->route('posts.yourdeck')->with('success', 'デッキの共有が取り消されました');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'デッキの共有取り消しに失敗しました');
+    }
+}
+
+
 }

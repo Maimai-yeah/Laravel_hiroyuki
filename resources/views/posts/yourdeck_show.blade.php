@@ -27,16 +27,51 @@
 
 
                     <h4 class="mt-4">カード一覧</h4>
-                    <ul class="list-group mt-2">
-                        @forelse ($deck->cards as $card)
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ $card->name }}
-                                <span class="badge bg-primary rounded-pill">{{ $card->pivot->quantity }} 枚</span>
-                            </li>
-                        @empty
-                            <li class="list-group-item text-muted">このデッキにはカードがありません。</li>
-                        @endforelse
-                    </ul>
+
+                    @if ($deck->cards->isEmpty())
+                        <p class="text-muted">このデッキにはカードがありません。</p>
+                    @else
+                        <div class="border p-3 rounded bg-light">
+                            <div class="row row-cols-6 g-0">
+                                @foreach ($deck->cards as $card)
+                                    @for ($i = 0; $i < $card->pivot->quantity; $i++)
+                                        <div class="col">
+                                            <img src="{{ $card->image_url ?? asset('images/placeholder.png') }}"
+                                                class="img-fluid d-block w-100"
+                                                style="aspect-ratio: 3/4; object-fit: cover;" alt="{{ $card->name }}">
+                                        </div>
+                                    @endfor
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                    <h4 class="mt-4">カード一覧</h4>
+
+                    @if ($deck->cards->isEmpty())
+                        <p class="text-muted">このデッキにはカードがありません。</p>
+                    @else
+                        <div class="table-responsive border p-3 rounded bg-light">
+                            <table class="table table-bordered table-striped mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>カード名</th>
+                                        <th>枚数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($deck->cards as $card)
+                                        <tr>
+                                            <td>{{ $card->name }}</td>
+                                            <td>{{ $card->pivot->quantity }}枚</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+
+
+
 
                     <div class="mt-4">
                         <a href="{{ route('posts.yourdeck') }}" class="btn btn-secondary">
