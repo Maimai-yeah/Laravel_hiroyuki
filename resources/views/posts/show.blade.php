@@ -92,7 +92,7 @@
 
                             const button = document.getElementById(`like-button-${commentId}`);
                             const likeCount = document.getElementById(
-                            `like-count-${commentId}`);
+                                `like-count-${commentId}`);
 
                             if (data.action === 'added') {
                                 button.classList.remove('btn-outline-danger');

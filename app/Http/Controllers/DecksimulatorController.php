@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Card;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Deck;
 
 class DecksimulatorController extends Controller
 {
@@ -22,39 +23,36 @@ class DecksimulatorController extends Controller
     public function decksimulator(Request $request)
     {
         $sortBy = $request->input('sort_by', 'created_at');
+        $selectedClass = $request->input('class'); // URLから選択されたクラスを取得
 
-        // クエリビルダー
         $query = Card::query();
 
-        // ▼ フィルター適用
+        // クラスフィルター：指定されたクラス + ニュートラル
+        if ($selectedClass) {
+            $query->whereIn('class', [$selectedClass, 'ニュートラル']);
+        }
+
+        // ▼ その他フィルター
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->input('name') . '%');
         }
         if ($request->filled('card_type')) {
             $query->where('card_type', $request->input('card_type'));
         }
-        
-
-        if ($request->filled('class')) {
-            $query->where('class', $request->input('class'));
-        }
-
         if ($request->filled('version')) {
             $query->where('version', $request->input('version'));
         }
-
         if ($request->filled('cost')) {
             $query->where('cost', $request->input('cost'));
         }
-
         if ($request->filled('rarity')) {
             $query->where('rarity', $request->input('rarity'));
         }
 
-        // ▼ 並び替えとページネーション
+        // 並び替え + ページネーション
         $cards = $query->orderBy($sortBy, 'desc')->paginate(20)->appends($request->query());
 
-        // ▼ Ajaxの場合：JSONでカード一覧HTMLを返す
+        // Ajax用レスポンス
         if ($request->ajax()) {
             $cardsView = view('partials.card_list', compact('cards'))->render();
             return response()->json([
@@ -62,8 +60,8 @@ class DecksimulatorController extends Controller
             ]);
         }
 
-        // ▼ 通常のリクエスト
-        return view('posts.decksimulator', compact('cards'));
+        // 通常のビュー表示
+        return view('posts.decksimulator', compact('cards', 'selectedClass'));
     }
 
     /**
@@ -91,6 +89,9 @@ class DecksimulatorController extends Controller
         return response()->json(['error' => 'カードが見つかりませんでした'], 404);
     }
 
+    /**
+     * デッキを保存する
+     */
     public function saveDeck(Request $request)
     {
         // ログインしていない場合はエラーを返す
@@ -100,7 +101,8 @@ class DecksimulatorController extends Controller
 
         // リクエストデータのバリデーション
         $validated = $request->validate([
-            'name' => 'required|string|max:255', // ← 追加
+            'name' => 'required|string|max:255',
+            'class' => 'required|string|max:255',
             'deck' => 'required|array|min:1',  // デッキが1枚以上
             'deck.*.card_id' => 'required|exists:cards,id',  // カードIDは存在する必要あり
             'deck.*.count' => 'required|integer|min:1|max:3',  // カードの枚数は1〜3
@@ -109,21 +111,24 @@ class DecksimulatorController extends Controller
         // 現在ログインしているユーザーを取得
         $user = Auth::user();
 
-        // デッキデータを保存（ここでは仮にデータベースに保存する処理）
-        $deckData = $validated['deck'];
+        // ユーザーごとのデッキ保存ロジック
+        try {
+            // デッキを作成（decks テーブルに保存）
+            $deck = $user->decks()->create([
+                'name' => $validated['name'],
+                'class' => $validated['class'], // クラスも保存する
+            ]);
 
-        // ユーザーごとのデッキ保存ロジック（データベースの保存）
-        // 例: デッキを作成（decks テーブルに保存）
-$deck = $user->decks()->create([
-    'name' => $validated['name'],
-]);
+            // 中間テーブルにカードと枚数を保存（deck_card テーブルなどを想定）
+            foreach ($validated['deck'] as $item) {
+                $deck->cards()->attach($item['card_id'], ['quantity' => $item['count']]);
+            }
 
-// 中間テーブルにカードと枚数を保存（deck_card テーブルなどを想定）
-foreach ($validated['deck'] as $item) {
-    $deck->cards()->attach($item['card_id'], ['quantity' => $item['count']]);
-}
-
-        // 成功のレスポンス
-        return response()->json(['success' => true, 'message' => 'デッキが保存されました']);
+            // 成功のレスポンス
+            return response()->json(['success' => true, 'message' => 'デッキが保存されました']);
+        } catch (\Exception $e) {
+            // 例外が発生した場合はエラーレスポンスを返す
+            return response()->json(['success' => false, 'message' => 'デッキの保存に失敗しました: ' . $e->getMessage()]);
+        }
     }
 }

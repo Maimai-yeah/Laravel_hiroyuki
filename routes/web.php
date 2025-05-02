@@ -7,6 +7,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CardlistController;
 use App\Http\Controllers\DecksimulatorController;
+use App\Http\Controllers\yourdeckController;
 use App\Models\Like;
 
 Route::get('/', [PostController::class, 'index'])->name('home');
@@ -37,4 +38,12 @@ Route::get('/card-info/{id}', [CardlistController::class, 'getCardInfo']);
 Route::get('/leaderselect', [DecksimulatorController::class, 'leaderselect'])->name('posts.leaderselect');
 Route::get('/decksimulator', [DecksimulatorController::class, 'decksimulator'])->name('posts.decksimulator');
 
+
 Route::middleware('auth')->post('/save-deck', [DecksimulatorController::class, 'saveDeck'])->name('deck.save');
+
+//あなたのデッキのルーティング
+Route::middleware('auth')->group(function () {
+    Route::get('/yourdeck', [YourDeckController::class, 'yourdeck'])->name('posts.yourdeck');
+    Route::get('/yourdeck/{id}', [YourDeckController::class, 'show'])->name('yourdeck.show');
+    Route::delete('/yourdeck/{id}', [YourDeckController::class, 'destroy'])->name('yourdeck.destroy');
+});

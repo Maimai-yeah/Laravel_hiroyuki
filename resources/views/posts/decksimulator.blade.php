@@ -238,6 +238,7 @@
                     <div class="d-flex justify-content-center align-items-center">
                         <a href="{{ route('home') }}" class="btn btn-light mb-2">
                             <i class="mdi mdi-arrow-left me-2">トップページに戻る</i>
+
                         </a>
                     </div>
                 </div>
@@ -254,18 +255,16 @@
         let cardDetails = []; // カードの詳細情報
         let currentCardIndex = -1; // 現在表示中のカードのインデックス
         let isAnimating = false; // アニメーション中かどうか
+        const selectedClass = "{{ request('class') }}"; // 'ネメシス' や 'エルフ' など
         const isLoggedIn = {{ Auth::check() ? 'true' : 'false' }}; // ログイン状態
 
-        // ページ読み込み後の初期処理
         document.addEventListener("DOMContentLoaded", function() {
-            bindCardClickEvents(); // カードのクリックイベントを設定
+            bindCardClickEvents();
 
             // デッキリスト内でカードをクリックした場合
             document.getElementById('deckList').addEventListener('click', function(event) {
-                if (event.target.closest('button.btn-danger') || event.target.closest('select')) {
+                if (event.target.closest('button.btn-danger') || event.target.closest('select'))
                     return; // 削除ボタンやセレクトボックスの場合は詳細表示しない
-                }
-
                 const cardElement = event.target.closest('.deck-card-wrapper');
                 if (cardElement) {
                     const cardId = cardElement.getAttribute('data-deck-card-id');
@@ -291,16 +290,15 @@
             // カード検索フォームの送信処理
             document.getElementById("cardSearchForm")?.addEventListener("submit", function(e) {
                 e.preventDefault();
-                const form = e.target;
-                const formData = new FormData(form);
+                const formData = new FormData(e.target);
                 const query = new URLSearchParams(formData).toString();
 
-                fetch(form.action + "?" + query, {
+                fetch(e.target.action + "?" + query, {
                         headers: {
                             "X-Requested-With": "XMLHttpRequest"
                         }
                     })
-                    .then(response => response.json())
+                    .then(res => res.json())
                     .then(data => {
                         document.getElementById("cardList").innerHTML = data.cards;
                         bindCardClickEvents();
@@ -311,8 +309,18 @@
                     .catch(error => console.error("検索エラー:", error));
             });
 
-            // ローカルストレージからデッキの状態を復元
-            loadDeckFromLocalStorage();
+            // ローカルストレージからの復元を削除（今回はローカル保存しないため）
+            // loadDeckFromLocalStorage();
+
+            // ログインしていない場合に保存ボタンを無効化
+            if (!isLoggedIn) {
+                const saveBtn = document.getElementById('saveDeckBtn');
+                if (saveBtn) {
+                    saveBtn.disabled = true;
+                    saveBtn.classList.add('disabled');
+                    saveBtn.title = '保存にはログインが必要です';
+                }
+            }
         });
 
         // カードクリックイベントをバインド
@@ -331,23 +339,17 @@
 
         // デッキにカードを追加
         function addCardToDeck(cardId, cardElement = null) {
-            if (!deck[cardId]) {
-                deck[cardId] = 0;
-            }
-
+            if (!deck[cardId]) deck[cardId] = 0;
             if (deck[cardId] < 3) {
                 deck[cardId]++;
                 deckCount++;
                 document.getElementById('deckCount').textContent = deckCount;
-
-                fetchCardDetails(cardId); // カード詳細を取得
-
-                // アニメーションをトリガー
+                fetchCardDetails(cardId);
                 const deckCounterBtn = document.getElementById('deckCounterBtn');
                 deckCounterBtn.classList.remove('bounce');
-                deckCounterBtn.offsetHeight; // 強制的に再描画
+                deckCounterBtn.offsetHeight;
                 deckCounterBtn.classList.add('bounce');
-                deckCounterBtn.addEventListener('animationend', function() {
+                deckCounterBtn.addEventListener('animationend', () => {
                     deckCounterBtn.classList.remove('bounce');
                 }, {
                     once: true
@@ -373,19 +375,19 @@
                     col.className = 'deck-card-wrapper';
                     col.setAttribute('data-deck-card-id', cardId);
                     col.innerHTML = `
-                    <div class="deck-card text-center">
-                        <img src="${data.image_url}" alt="${data.name}" class="img-fluid mb-1" />
-                        <p class="mb-2">${data.name}</p>
-                        <div class="mb-1">
-                            <select class="form-select form-select-sm" style="width: 90px;" onchange="updateCardCount(${cardId}, this)">
-                                <option value="1" ${deck[cardId] == 1 ? "selected" : ""}>1</option>
-                                <option value="2" ${deck[cardId] == 2 ? "selected" : ""}>2</option>
-                                <option value="3" ${deck[cardId] == 3 ? "selected" : ""}>3</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-sm btn-danger" style="width: 90%;" onclick="removeCard(${cardId})">削除</button>
+                <div class="deck-card text-center">
+                    <img src="${data.image_url}" alt="${data.name}" class="img-fluid mb-1" />
+                    <p class="mb-2">${data.name}</p>
+                    <div class="mb-1">
+                        <select class="form-select form-select-sm" style="width: 90px;" onchange="updateCardCount(${cardId}, this)">
+                            <option value="1" ${deck[cardId] == 1 ? "selected" : ""}>1</option>
+                            <option value="2" ${deck[cardId] == 2 ? "selected" : ""}>2</option>
+                            <option value="3" ${deck[cardId] == 3 ? "selected" : ""}>3</option>
+                        </select>
                     </div>
-                `;
+                    <button class="btn btn-sm btn-danger" style="width: 90%;" onclick="removeCard(${cardId})">削除</button>
+                </div>
+            `;
                     deckList.appendChild(col);
                     document.getElementById('deckCountDisplay').textContent = deckCount;
                 })
@@ -405,9 +407,7 @@
         // デッキからカードを削除
         function removeCard(cardId) {
             const cardEl = document.querySelector(`[data-deck-card-id="${cardId}"]`);
-            if (cardEl) {
-                cardEl.remove();
-            }
+            if (cardEl) cardEl.remove();
             deckCount -= deck[cardId];
             delete deck[cardId];
             document.getElementById('deckCount').textContent = deckCount;
@@ -419,9 +419,7 @@
             const messageElement = document.createElement('div');
             messageElement.classList.add('alert', 'alert-warning', 'message-alert');
             messageElement.textContent = message;
-
             document.body.appendChild(messageElement);
-
             setTimeout(() => {
                 messageElement.style.display = 'none';
             }, 1000);
@@ -448,9 +446,7 @@
             document.getElementById('modalCardRarity').textContent = data.rarity;
             document.getElementById('modalCardEvolvedName').textContent = data.evolved_name;
             document.getElementById('modalCardVersion').textContent = data.version;
-
-            var cardModal = new bootstrap.Modal(document.getElementById('cardModal'));
-            cardModal.show();
+            new bootstrap.Modal(document.getElementById('cardModal')).show();
         }
 
         // デッキを保存する処理
@@ -475,7 +471,6 @@
                 card_id: parseInt(cardId),
                 count: count
             }));
-
             fetch("/save-deck", {
                     method: "POST",
                     headers: {
@@ -484,21 +479,31 @@
                     },
                     body: JSON.stringify({
                         name: deckName, // デッキ名
-                        deck: deckData
+                        deck: deckData,
+                        class: selectedClass
                     })
                 })
-                .then(response => response.json())
+                .then(response => response.text()) // まずテキストとして受け取る
                 .then(data => {
-                    if (data.success) {
-                        alert('デッキが保存されました！');
-                    } else {
-                        showMessage('デッキの保存に失敗しました');
+                    console.log('サーバーからのレスポンス:', data); // デバッグ用にレスポンスを表示
+                    try {
+                        const jsonData = JSON.parse(data); // JSONとしてパース
+                        if (jsonData.success) {
+                            alert('デッキが保存されました！');
+                        } else {
+                            alert('保存に失敗しました: ' + jsonData.message);
+                        }
+                    } catch (e) {
+                        console.error('エラーが発生しました:', e);
+                        alert('サーバーエラー: 予期しないレスポンスが返されました');
                     }
                 })
                 .catch(error => {
-                    console.error("保存エラー:", error);
-                    showMessage('デッキの保存に失敗しました');
+                    console.error('保存エラー:', error);
+                    alert('デッキの保存に失敗しました');
                 });
+
+
         }
     </script>
 @endpush

@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Deck extends Model
 {
-    // これを追加！
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'class', 'user_id'];
 
     public function user()
     {
@@ -15,10 +14,9 @@ class Deck extends Model
     }
 
     public function cards()
-{
-    return $this->belongsToMany(\App\Models\Card::class, 'deck_card') // ← ここを追加
-                ->withPivot('quantity')
-                ->withTimestamps();
-}
-
+    {
+        return $this->belongsToMany(\App\Models\Card::class, 'deck_card')
+                    ->withPivot('quantity')
+                    ->withTimestamps();
+    }
 }

@@ -42,8 +42,8 @@
                                         <div class="card-item-area-inner">
                                             <div class="row gx-2 gy-3">
                                                 <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <a href="{{ route('posts.decksimulator') }}" class="card-image-link">
-                                                        <!-- decksimulator のルート名を指定 -->
+                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ネメシス']) }}"
+                                                        class="card-image-link">
                                                         <div class="card-image-crop">
                                                             <img src="https://pbs.twimg.com/media/Gl6dJQhbYAI94qY?format=jpg&name=medium"
                                                                 alt="ネメシス" style="object-position: 10% 15px;" />
@@ -54,51 +54,63 @@
 
 
                                                 <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div class="card-image-crop">
-                                                        <img src="https://pbs.twimg.com/media/Gl6dPUXbEAE1HCr?format=jpg&name=medium"
-                                                            alt="エルフ" style="object-position: 5% 20px;" />
-                                                        <div class="card-image-name">エルフ</div>
-                                                    </div>
+                                                    <a href="{{ route('posts.decksimulator', ['class' => 'エルフ']) }}">
+                                                        <div class="card-image-crop">
+                                                            <img src="https://pbs.twimg.com/media/Gl6dPUXbEAE1HCr?format=jpg&name=medium"
+                                                                alt="エルフ" style="object-position: 5% 20px;" />
+                                                            <div class="card-image-name">エルフ</div>
+                                                        </div>
+                                                    </a>
                                                 </div>
 
                                                 <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div class="card-image-crop">
-                                                        <img src="https://pbs.twimg.com/media/Gl6dUvba4AEGHUE?format=jpg&name=medium"
-                                                            alt="ロイヤル" style="object-position: 10% 20px;" />
-                                                        <div class="card-image-name">ロイヤル</div>
-                                                    </div>
+                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ロイヤル']) }}">
+                                                        <div class="card-image-crop">
+                                                            <img src="https://pbs.twimg.com/media/Gl6dUvba4AEGHUE?format=jpg&name=medium"
+                                                                alt="ロイヤル" style="object-position: 10% 20px;" />
+                                                            <div class="card-image-name">ロイヤル</div>
+                                                        </div>
+                                                    </a>
                                                 </div>
 
                                                 <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div class="card-image-crop">
-                                                        <img src="https://pbs.twimg.com/media/Gl6dZoIbYAIp8Cb?format=jpg&name=medium"
-                                                            alt="ウィッチ" style="object-position: 10% 20px;" />
-                                                        <div class="card-image-name">ウィッチ</div>
-                                                    </div>
+                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ウィッチ']) }}">
+                                                        <div class="card-image-crop">
+                                                            <img src="https://pbs.twimg.com/media/Gl6dZoIbYAIp8Cb?format=jpg&name=medium"
+                                                                alt="ウィッチ" style="object-position: 10% 20px;" />
+                                                            <div class="card-image-name">ウィッチ</div>
+                                                        </div>
+                                                    </a>
                                                 </div>
 
                                                 <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div class="card-image-crop">
-                                                        <img src="https://pbs.twimg.com/media/Gl6dekbbYAMuH1A?format=jpg&name=medium"
-                                                            alt="ドラゴン" style="object-position: 10% 20px;" />
-                                                        <div class="card-image-name">ドラゴン</div>
-                                                    </div>
+                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ドラゴン']) }}">
+                                                        <div class="card-image-crop">
+                                                            <img src="https://pbs.twimg.com/media/Gl6dekbbYAMuH1A?format=jpg&name=medium"
+                                                                alt="ドラゴン" style="object-position: 10% 20px;" />
+                                                            <div class="card-image-name">ドラゴン</div>
+                                                        </div>
+                                                    </a>
                                                 </div>
 
                                                 <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div class="card-image-crop">
-                                                        <img src="https://pbs.twimg.com/media/Gl6doo_bEAAlacW?format=jpg&name=medium"
-                                                            alt="ナイトメア" style="object-position: 45% 10px;" />
-                                                        <div class="card-image-name">ナイトメア</div>
-                                                    </div>
+                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ナイトメア']) }}">
+                                                        <div class="card-image-crop">
+                                                            <img src="https://pbs.twimg.com/media/Gl6doo_bEAAlacW?format=jpg&name=medium"
+                                                                alt="ナイトメア" style="object-position: 45% 10px;" />
+                                                            <div class="card-image-name">ナイトメア</div>
+                                                        </div>
+                                                    </a>
                                                 </div>
 
                                                 <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div class="card-image-crop">
-                                                        <img src="https://pbs.twimg.com/media/Gl6dyWyawAAyuAi?format=jpg&name=medium"
-                                                            alt="ビショップ" style="object-position: 10% 20px;" />
-                                                        <div class="card-image-name">ビショップ</div>
-                                                    </div>
+                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ビショップ']) }}">
+                                                        <div class="card-image-crop">
+                                                            <img src="https://pbs.twimg.com/media/Gl6dyWyawAAyuAi?format=jpg&name=medium"
+                                                                alt="ビショップ" style="object-position: 10% 20px;" />
+                                                            <div class="card-image-name">ビショップ</div>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>

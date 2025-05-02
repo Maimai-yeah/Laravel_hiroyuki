@@ -43,11 +43,11 @@
 
                                         <!-- あなたのデッキ -->
                                         <li class="tool-item border rounded flex-shrink-1 p-0" style="overflow: hidden;">
-                                            <div
+                                            <a href="{{ route('posts.yourdeck') }}"
                                                 class="btn btn-light w-100 h-100 d-flex flex-column justify-content-center align-items-center gap-1 text-center">
                                                 <i class="mdi mdi-cards text-info lh-1" style="font-size: 45px;"></i>
                                                 <span class="text-dark small">あなたのデッキ</span>
-                                            </div>
+                                            </a>
                                         </li>
 
                                         <!-- みんなのデッキ -->

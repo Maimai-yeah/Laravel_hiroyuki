@@ -6,10 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>掲示板アプリ</title>
     <!-- Bootstrap 5 CSS -->
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- CSRF Token -->
@@ -18,14 +15,20 @@
     <!-- Bootstrap 5 JS (Bundle includes Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Material Design Icons (Optional, if you need to use these icons) -->
+    <!-- Material Design Icons -->
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
 
     <!-- Vue.js (Optional, if you plan to use Vue.js) -->
     <script src="https://unpkg.com/vue@next"></script>
+
+    <!-- Default stylesheets -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style2.css') }}" rel="stylesheet">
+
+    <!-- Custom styles can be pushed here -->
+    @stack('styles') <!-- ここでスタイルの積み重ねを行う -->
 </head>
+
 
 <body>
 
