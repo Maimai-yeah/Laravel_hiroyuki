@@ -51,7 +51,8 @@ Route::middleware('auth')->group(function () {
 });
 
 //皆のデッキのルーティング
-Route::get('/our-decks', [OurDeckController::class, 'index'])->name('posts.ourdeck');
+Route::get('/ourdecks', [OurDeckController::class, 'index'])->name('posts.ourdeck');
+Route::get('/ourdeck/{id}', [OurDeckController::class, 'show'])->name('ourdeck.show');
 // routes/web.php
 // 共有を取り消す
 Route::post('/yourdeck/{id}/unshare', [YourDeckController::class, 'unshareDeck'])->name('yourdeck.unshare');

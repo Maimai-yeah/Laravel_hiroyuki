@@ -48,11 +48,11 @@
                         $classObjectPositions = [
                             'ネメシス' => '10% 15px',
                             'エルフ' => '5% 20px',
-                            'ロイヤル' => 'center',
-                            'ウィッチ' => 'center',
-                            'ドラゴン' => 'center',
-                            'ナイトメア' => 'center',
-                            'ビショップ' => 'center',
+                            'ロイヤル' => '10% 20px',
+                            'ウィッチ' => '10% 20px',
+                            'ドラゴン' => '10% 20px',
+                            'ナイトメア' => '45% 10px',
+                            'ビショップ' => '10% 20px',
                         ];
 
                         $leaderImage = $classImages[$deck->class] ?? null;

@@ -38,7 +38,17 @@
                             'ナイトメア' => 'https://pbs.twimg.com/media/Gl6doo_bEAAlacW?format=jpg&name=medium',
                             'ビショップ' => 'https://pbs.twimg.com/media/Gl6dyWyawAAyuAi?format=jpg&name=medium',
                         ];
+                        $classObjectPositions = [
+                            'ネメシス' => '10% 15px',
+                            'エルフ' => '5% 20px',
+                            'ロイヤル' => '10% 20px',
+                            'ウィッチ' => '10% 20px',
+                            'ドラゴン' => '10% 20px',
+                            'ナイトメア' => '45% 10px',
+                            'ビショップ' => '10% 20px',
+                        ];
                         $leaderImage = $classImages[$deck->class] ?? null;
+                        $objectPosition = $classObjectPositions[$deck->class] ?? 'center';
                         $totalCards = $deck->cards->sum('pivot.quantity');
                     @endphp
 
@@ -48,7 +58,7 @@
                                 <div class="col-5">
                                     <div class="card-image-crop" style="pointer-events: none;">
                                         <img src="{{ $leaderImage }}" alt="{{ $deck->class }}"
-                                            style="object-position: center;" />
+                                            style="object-position: {{ $objectPosition }};" />
                                         <div class="card-image-name">{{ $deck->class }}</div>
                                     </div>
                                 </div>
@@ -58,7 +68,7 @@
                                     <p class="mb-1 text-muted small">作者: {{ $deck->user->name }}</p>
                                     <p class="text-muted mb-3">作成日: {{ $deck->created_at->format('Y/m/d') }}</p>
 
-                                    <a href="{{ route('yourdeck.show', $deck->id) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('ourdeck.show', $deck->id) }}" class="btn btn-primary btn-sm">
                                         詳細を見る
                                     </a>
                                 </div>
