@@ -3,12 +3,13 @@ li {
     list-style-type: none;
 }
 .footer {
-    background: #a18904;
-    position: static;
+    background: #808080; /* 標準的な灰色 */
+    position: relative;
     padding: 1rem 0;
     height: auto;
     color: #fff;
 }
+
 footer a {
     color: inherit; /* 親要素の色を継承する */
     text-decoration: none; /* 下線を消す */
@@ -197,4 +198,29 @@ a {
     font-size: 11px;
     padding: 2px 4px;
     margin-top: 2px;
+}
+
+/* いいねボタンを押した時にピンク色に */
+.like-btn.liked {
+    background-color: #e83e8c;
+    border-color: #e83e8c;
+    color: white;
+}
+
+.like-btn.liked i {
+    color: white;
+}
+/* いいね数のスタイル */
+.like-count {
+    font-family: "Roboto", sans-serif; /* おしゃれなフォントを選択 */
+    font-size: 16px; /* 少し大きめに */
+    font-weight: bold; /* 太字にして目立たせる */
+    color: #333; /* ダークグレーなど落ち着いた色に */
+    transition: color 0.3s ease; /* 色の変化を滑らかに */
+    margin-top: 4px;
+}
+
+/* いいね数が変わったときの色変更 */
+.like-btn.liked + .like-count {
+    color: #e74c3c; /* いいねをした場合、赤色に */
 }

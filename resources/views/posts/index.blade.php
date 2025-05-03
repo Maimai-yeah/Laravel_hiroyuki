@@ -2,9 +2,9 @@
 
 @section('content')
     <main class="main">
-        <div class="container">
+        <div class="container-fluid">
             <div class="dashboard-01">
-                <div class="row mt-4">
+                <div class="row justify-content-center mt-4">
                     <div class="col-12 col-lg-8 col-xl-9 mb-4">
                         <div class="row main-contents-group">
                             <div class="col-12">
@@ -62,12 +62,12 @@
 
                                         <!-- おすすめデッキ -->
                                         <li class="tool-item border rounded flex-shrink-1 p-0" style="overflow: hidden;">
-                                            <div
+                                            <a href="{{ route('posts.osusumedeck') }}"
                                                 class="btn btn-light w-100 h-100 d-flex flex-column justify-content-center align-items-center gap-1 text-center">
                                                 <i class="mdi mdi-cards-playing-outline lh-1 text-info"
                                                     style="font-size: 45px;"></i>
                                                 <span class="text-dark small">おすすめデッキ</span>
-                                            </div>
+                                            </a>
                                         </li>
                                     </ul>
 

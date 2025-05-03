@@ -18,7 +18,7 @@ class CreateCardsTable extends Migration
             $table->string('name');  // カード名
             $table->string('image_url');  // 画像URL
             $table->integer('cost');  // コスト
-            $table->enum('class', ['ネメシス', 'エルフ', 'ロイヤル', 'ウィッチ', 'ドラゴン', 'ナイトメア', 'ビショップ','ニュートラル'])->nullable(); // 日本語のクラス
+            $table->enum('class', ['ネメシス', 'エルフ', 'ロイヤル', 'ウィッチ', 'ドラゴン', 'ナイトメア', 'ビショップ'])->nullable(); // 日本語のクラス
             $table->enum('rarity', ['ブロンズ', 'シルバー', 'ゴールド', 'レジェンド'])->nullable();  // 日本語のレアリティ
             $table->string('version', 50)->nullable();  // バージョン
             $table->integer('attack')->nullable();  // 攻撃力

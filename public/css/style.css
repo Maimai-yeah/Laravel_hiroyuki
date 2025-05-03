@@ -1,9 +1,11 @@
-body,
-html {
-    margin: 0; /* デフォルトの余白を削除 */
-    padding: 0; /* パディングも削除 */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
-
 .header-box {
     text-align: center; /* テキストも中央寄せ */
     background-color: orange;

@@ -14,6 +14,7 @@
                     </ol>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-12">
                     <h1 class="fs-1 mt-2 mb-0 d-flex align-items-center">
@@ -24,9 +25,9 @@
                     <p style="color: #6c757d; font-size: 14px; font-style: italic; margin-top: 10px;">
                         画像をクリックすると、右下のデッキボタンに追加されます。
                     </p>
-
                 </div>
             </div>
+
             <div class="col-12 mb-1">
                 <div class="d-grid">
                     <button type="button" class="btn btn-success js-card-search-filter" data-bs-toggle="modal"
@@ -35,6 +36,7 @@
                     </button>
                 </div>
             </div>
+
             <!-- カード検索のモーダル -->
             <div class="modal fade" id="cardSearchModal" tabindex="-1" aria-labelledby="cardSearchModalLabel"
                 aria-hidden="true">
@@ -60,11 +62,13 @@
                                     <option value="">指定なし</option>
                                     @foreach (['フォロワー', 'スペル', 'アミュレット'] as $type)
                                         <option value="{{ $type }}"
-                                            {{ request('card_type') == $type ? 'selected' : '' }}>{{ $type }}
+                                            {{ request('card_type') == $type ? 'selected' : '' }}>
+                                            {{ $type }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
+
                             <!-- クラス -->
                             <div class="mb-3">
                                 <label for="searchClass" class="form-label">クラス</label>
@@ -72,7 +76,9 @@
                                     <option value="">指定なし</option>
                                     @foreach (['エルフ', 'ロイヤル', 'ウィッチ', 'ドラゴン', 'ナイトメア', 'ビショップ', 'ネメシス', 'ニュートラル'] as $class)
                                         <option value="{{ $class }}"
-                                            {{ request('class') == $class ? 'selected' : '' }}>{{ $class }}</option>
+                                            {{ request('class') == $class ? 'selected' : '' }}>
+                                            {{ $class }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -84,7 +90,8 @@
                                     <option value="">指定なし</option>
                                     @foreach (['v1.0', 'ベーシック', 'ワイルドウエスト'] as $version)
                                         <option value="{{ $version }}"
-                                            {{ request('version') == $version ? 'selected' : '' }}>{{ $version }}
+                                            {{ request('version') == $version ? 'selected' : '' }}>
+                                            {{ $version }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -104,12 +111,12 @@
                                     <option value="">指定なし</option>
                                     @foreach (['ブロンズ', 'シルバー', 'ゴールド', 'レジェンド'] as $rarity)
                                         <option value="{{ $rarity }}"
-                                            {{ request('rarity') == $rarity ? 'selected' : '' }}>{{ $rarity }}
+                                            {{ request('rarity') == $rarity ? 'selected' : '' }}>
+                                            {{ $rarity }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
-
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">検索</button>
@@ -147,7 +154,6 @@
                                 @endforeach
                             </div>
 
-
                             <div class="row mt-1">
                                 <div class="col-12 mt-4 mb-0 d-flex justify-content-center">
                                     {!! $cards->links() !!}
@@ -176,11 +182,6 @@
                         </div>
 
                         <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-                            <!-- デッキカード数の表示 -->
-                            <div class="deck-summary mb-3 d-flex justify-content-between align-items-center">
-                                <span><strong>デッキ枚数:</strong> <span id="deckCountDisplay">0</span>/40</span>
-                            </div>
-
                             <!-- カードリスト（3分割表示） -->
                             <div id="deckList" class="deck-grid">
                                 <!-- JSで .col-md-4 が動的に追加される -->
@@ -230,15 +231,11 @@
                 </div>
             </div>
 
-
-
-
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex justify-content-center align-items-center">
-                        <a href="{{ route('home') }}" class="btn btn-light mb-2">
+                        <a href="{{ route('home') }}" class="btn btn-light mb-4">
                             <i class="mdi mdi-arrow-left me-2">トップページに戻る</i>
-
                         </a>
                     </div>
                 </div>

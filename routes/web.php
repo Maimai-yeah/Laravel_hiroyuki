@@ -9,6 +9,7 @@ use App\Http\Controllers\CardlistController;
 use App\Http\Controllers\DecksimulatorController;
 use App\Http\Controllers\YourDeckController;
 use App\Http\Controllers\OurDeckController;
+use App\Http\Controllers\OsusumeDeckController;
 use App\Models\Like;
 
 Route::get('/', [PostController::class, 'index'])->name('home');
@@ -42,13 +43,15 @@ Route::get('/decksimulator', [DecksimulatorController::class, 'decksimulator'])-
 
 Route::middleware('auth')->post('/save-deck', [DecksimulatorController::class, 'saveDeck'])->name('deck.save');
 
-//あなたのデッキのルーティング
 Route::middleware('auth')->group(function () {
     Route::get('/yourdeck', [YourDeckController::class, 'yourdeck'])->name('posts.yourdeck');
     Route::get('/yourdeck/{id}', [YourDeckController::class, 'show'])->name('yourdeck.show');
+    Route::put('/yourdeck/{id}/description', [YourDeckController::class, 'updateDescription'])->name('yourdeck.updateDescription');
     Route::delete('/yourdeck/{id}', [YourDeckController::class, 'destroy'])->name('yourdeck.destroy');
     Route::post('/yourdeck/{id}/share', [YourDeckController::class, 'shareDeck'])->name('yourdeck.share');
 });
+
+
 
 //皆のデッキのルーティング
 Route::get('/ourdecks', [OurDeckController::class, 'index'])->name('posts.ourdeck');
@@ -56,5 +59,12 @@ Route::get('/ourdeck/{id}', [OurDeckController::class, 'show'])->name('ourdeck.s
 // routes/web.php
 // 共有を取り消す
 Route::post('/yourdeck/{id}/unshare', [YourDeckController::class, 'unshareDeck'])->name('yourdeck.unshare');
+Route::middleware('auth')->group(function () {
+    // デッキ詳細ページで「いいね」をトグル
+    Route::post('/deck/{id}/like', [OurDeckController::class, 'toggleLike'])->name('deck.toggleLike');
+});
 
-
+Route::middleware('auth')->group(function () {
+    // おすすめデッキのページ
+    Route::get('/osusumedeck', [OsusumeDeckController::class, 'index'])->name('posts.osusumedeck');
+});

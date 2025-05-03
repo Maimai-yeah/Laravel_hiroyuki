@@ -3,7 +3,6 @@
 @section('content')
     <main class="main">
         <div class="container mt-4">
-
             <!-- パンくずリスト -->
             <div class="row">
                 <div class="col-12">
@@ -22,6 +21,12 @@
                         <span>みんなのデッキ</span>
                         <span class="ms-3 flex-grow-1 d-none d-md-block bg-light" style="height: 8px;"></span>
                     </h1>
+                    <p style="color: #6c757d; font-size: 14px; font-style: italic; margin-bottom: 0;">
+                        みんなが作ったデッキを見てみましょう。
+                    </p>
+                    <p style="color: #6c757d; font-size: 14px; font-style: italic; margin-top: 0; margin-bottom: 0;">
+                        気に入ったデッキはいいねしてみましょう。
+                    </p>
                 </div>
             </div>
 
@@ -49,7 +54,6 @@
                         ];
                         $leaderImage = $classImages[$deck->class] ?? null;
                         $objectPosition = $classObjectPositions[$deck->class] ?? 'center';
-                        $totalCards = $deck->cards->sum('pivot.quantity');
                     @endphp
 
                     <div class="col-md-6 col-lg-4 mb-4">
@@ -67,10 +71,38 @@
                                     <h5 class="card-title mb-1">{{ $deck->name }}</h5>
                                     <p class="mb-1 text-muted small">作者: {{ $deck->user->name }}</p>
                                     <p class="text-muted mb-3">作成日: {{ $deck->created_at->format('Y/m/d') }}</p>
-
                                     <a href="{{ route('ourdeck.show', $deck->id) }}" class="btn btn-primary btn-sm">
-                                        詳細を見る
+                                        詳細
                                     </a>
+
+                                    <!-- いいねボタン -->
+                                    @if (auth()->check())
+                                        @php
+                                            $liked = $deck->isLikedByUser(auth()->user()->id);
+                                        @endphp
+
+                                        <form action="{{ route('deck.toggleLike', $deck->id) }}" method="POST"
+                                            class="d-inline-block" id="like-form-{{ $deck->id }}">
+                                            @csrf
+                                            <div class="d-flex align-items-center">
+                                                @if ($liked)
+                                                    <button type="submit"
+                                                        class="btn btn-danger btn-sm mt-2 like-btn liked">
+                                                        <i class="mdi mdi-heart me-2"></i>
+                                                    </button>
+                                                @else
+                                                    <button type="submit" class="btn btn-light btn-sm mt-2 like-btn">
+                                                        <i class="mdi mdi-heart-outline me-2"></i>
+                                                    </button>
+                                                @endif
+                                                <!-- いいね数も一緒に表示 -->
+                                                <span class="ms-2 like-count"
+                                                    id="like-count-{{ $deck->id }}">{{ $deck->likes->count() }}</span>
+                                            </div>
+                                        </form>
+                                    @else
+                                        <p class="text-muted mt-2">いいねをするにはログインしてください。</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -100,4 +132,47 @@
             </div>
         </div>
     </main>
+
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                // いいねボタンのクリックイベント
+                $('form[id^="like-form-"]').on('submit', function(event) {
+                    event.preventDefault(); // フォームのデフォルトの送信をキャンセル
+
+                    var form = $(this);
+                    var formData = form.serialize(); // フォームデータをシリアライズ
+
+                    $.ajax({
+                        url: form.attr('action'),
+                        method: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            // いいね数の更新
+                            var likeCount = response.likeCount;
+                            var deckId = response.deckId;
+
+                            $('#like-count-' + deckId).text(likeCount);
+
+                            // ボタンの状態を更新
+                            if (response.liked) {
+                                form.find('button').removeClass('btn-light').addClass('btn-danger');
+                                form.find('i').removeClass('mdi-heart-outline').addClass(
+                                    'mdi-heart');
+                                form.find('button').text('いいね');
+                            } else {
+                                form.find('button').removeClass('btn-danger').addClass('btn-light');
+                                form.find('i').removeClass('mdi-heart').addClass(
+                                    'mdi-heart-outline');
+                                form.find('button').text('いいね');
+                            }
+                        },
+                        error: function() {
+                            alert('エラーが発生しました');
+                        }
+                    });
+                });
+            });
+        </script>
+    @endpush
 @endsection

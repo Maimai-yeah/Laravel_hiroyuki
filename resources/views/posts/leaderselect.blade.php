@@ -132,7 +132,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-center align-items-center">
-                    <a href="http://127.0.0.1:5500/SV-home.html" class="btn btn-light mb-4">
+                    <a href="{{ route('home') }}" class="btn btn-light mb-4">
                         <i class="mdi mdi-arrow-left me-2">トップページに戻る</i>
                     </a>
                 </div>

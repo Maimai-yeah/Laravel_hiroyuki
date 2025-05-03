@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Deck;
+use Illuminate\Support\Facades\Log;
 
 class YourDeckController extends Controller
 {
@@ -75,6 +76,27 @@ public function unshareDeck($id)
         return redirect()->back()->with('error', 'デッキの共有取り消しに失敗しました');
     }
 }
+public function updateDescription(Request $request, $id)
+{
+    $deck = Deck::where('user_id', Auth::id())->findOrFail($id);
+
+    $request->validate([
+        'description' => 'nullable|string|max:500',
+    ]);
+
+    try {
+        // デッキの説明を更新
+        $deck->description = $request->input('description');
+        $deck->save();
+
+        // 保存成功メッセージをフラッシュセッションに設定
+        return redirect()->route('yourdeck.show', $deck->id)->with('success', '保存に成功しました！');
+    } catch (\Exception $e) {
+        // 保存失敗時のエラーメッセージをフラッシュセッションに設定
+        return redirect()->route('yourdeck.show', $deck->id)->with('error', '保存に失敗しました');
+    }
+}
+
 
 
 }
