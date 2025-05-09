@@ -10,6 +10,8 @@ use App\Http\Controllers\DecksimulatorController;
 use App\Http\Controllers\YourDeckController;
 use App\Http\Controllers\OurDeckController;
 use App\Http\Controllers\OsusumeDeckController;
+use App\Http\Controllers\DeckCommentController;
+use App\Http\Controllers\ContactController;
 use App\Models\Like;
 
 Route::get('/', [PostController::class, 'index'])->name('home');
@@ -65,6 +67,33 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // おすすめデッキのページ
+    // おすすめデッキ一覧
     Route::get('/osusumedeck', [OsusumeDeckController::class, 'index'])->name('posts.osusumedeck');
+
+    // おすすめデッキ詳細
+    Route::get('/osusumedeck/{deck}', [OsusumeDeckController::class, 'show'])->name('posts.osusumedeck.show');
 });
+
+
+//footer このサイトについて
+Route::get('/konosite', function () {
+    return view('posts.footer.konosite');
+})->name('konosite');
+Route::get('/terms', function () {
+    return view('posts.footer.terms');
+})->name('terms');
+Route::get('/privacy', function () {
+    return view('posts.footer.privacy');
+})->name('privacy');
+
+/* Route::middleware('auth')->group(function () {
+    // コメントの作成
+    Route::post('/decks/{deck}/comments', [DeckCommentController::class, 'store'])->name('comments.store');
+
+    // コメントの削除
+    Route::delete('/comments/{comment}', [DeckCommentController::class, 'destroy'])->name('comments.destroy');
+}); */
+
+//お問い合わせフォーム
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');

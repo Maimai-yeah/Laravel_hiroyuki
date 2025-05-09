@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Deck extends Model
 {
-    protected $fillable = ['name', 'class', 'user_id', 'share'];  // 'share'カラムを追加
+    protected $fillable = ['name', 'class', 'user_id', 'share', 'description'];  // 'share'カラムを追加
 
     // ユーザーとのリレーション
     public function user()
@@ -31,5 +31,10 @@ class Deck extends Model
     public function isLikedByUser($userId)
     {
         return $this->likes()->where('user_id', $userId)->exists();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(DeckComment::class);
     }
 }

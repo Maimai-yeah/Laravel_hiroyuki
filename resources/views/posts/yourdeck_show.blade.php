@@ -14,6 +14,7 @@
                         </li>
                         <li class="breadcrumb-item active">{{ $deck->name }}</li>
                     </ol>
+
                 </div>
             </div>
 
@@ -34,11 +35,12 @@
                         <i class="mdi mdi-cards-outline me-2" style="font-size: 45px"></i>
                         {{ $deck->name }}
                     </h1>
-                    <p class="text-muted">作成日: {{ $deck->created_at->format('Y/m/d') }}</p>
-
-
+                    <p style="color: #6c757d; font-size: 14px; font-style: italic; margin-bottom: 0;">
+                        デッキ説明を加えておくと、みんなのデッキ投稿時に表示されます。
+                    </p>
 
                     <h4 class="mt-4">カード一覧</h4>
+
 
                     @if ($deck->cards->isEmpty())
                         <p class="text-muted">このデッキにはカードがありません。</p>
@@ -57,6 +59,31 @@
                             </div>
                         </div>
                     @endif
+                    <!-- カード一覧表 -->
+                    <h4 class="mt-4">カード一覧</h4>
+                    @if ($deck->cards->isEmpty())
+                        <p class="text-muted">このデッキにはカードがありません。</p>
+                    @else
+                        <div class="table-responsive border p-3 rounded bg-light">
+                            <table class="table table-bordered table-striped mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>カード名</th>
+                                        <th>枚数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($deck->cards as $card)
+                                        <tr>
+                                            <td>{{ $card->name }}</td>
+                                            <td>{{ $card->pivot->quantity }}枚</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+
                     <h4 class="mt-4">デッキ説明</h4>
                     <form action="{{ route('yourdeck.updateDescription', $deck->id) }}" method="POST">
                         @csrf

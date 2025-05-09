@@ -5,7 +5,7 @@
     <div class="card mb-3">
         <div class="card-body">
             <h3 class="card-title">{{ $post->title }}</h3>
-            <p class="card-text">{{ $post->content }}</p>
+            <div class="card-text">{!! $post->content !!}</div>
             <a href="{{ route('posts.index') }}" class="btn btn-info">戻る</a>
             @if (auth()->check() && auth()->id() === $post->user_id)
                 <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-warning">編集</a>

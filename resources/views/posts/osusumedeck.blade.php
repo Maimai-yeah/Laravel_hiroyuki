@@ -3,93 +3,113 @@
 @section('content')
     <main class="main">
         <div class="container mt-4">
+
+            <!-- パンくずリスト -->
             <div class="row">
                 <div class="col-12">
-                    <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('home') }}">Top</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('posts.osusumedeck') }}">おすすめデッキ</a>
-                        </li>
-                        <li class="breadcrumb-item active">おすすめデッキ一覧</li>
+                    <ol class="breadcrumb mb-2">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Top</a></li>
+                        <li class="breadcrumb-item active">おすすめデッキ</li>
                     </ol>
                 </div>
             </div>
 
-            <div class="row">
+            <!-- 見出し -->
+            <div class="row mb-3">
                 <div class="col-12">
-                    <h1 class="fs-1 mt-3 d-flex align-items-center">
-                        <i class="mdi mdi-cards-outline me-2" style="font-size: 45px"></i>
-                        おすすめデッキ一覧
+                    <h1 class="fs-1 d-flex align-items-center">
+                        <i class="mdi mdi-cards-playing-spade lh-1 me-2" style="font-size: 45px"></i>
+                        <span>おすすめデッキ</span>
+                        <span class="ms-3 flex-grow-1 d-none d-md-block bg-light" style="height: 8px;"></span>
                     </h1>
+                    <p style="color: #6c757d; font-size: 14px; font-style: italic; margin-bottom: 0;">
+                        ここにはおすすめデッキが表示されます。
+                    </p>
+                    <p style="color: #6c757d; font-size: 14px; font-style: italic; margin-top: 0;  margin-bottom: 0;">
+                        流行りのデッキのほかに、投稿してくださった面白いデッキをご紹介させていただく事もございます。
+                        (共有されたくない場合は、デッキ詳細の中からチェックを外してください。)
+                    </p>
+                </div>
+            </div>
 
-                    <!-- おすすめデッキのループ -->
-                    @foreach ($recommendedDecks as $deck)
-                        <div class="mt-4">
-                            <h4>{{ $deck->name }}</h4>
-                            <p class="text-muted">作成日: {{ $deck->created_at->format('Y/m/d') }}</p>
+            <!-- デッキ一覧 -->
+            <div class="row">
+                @forelse($recommendedDecks as $deck)
+                    @php
+                        $classImages = [
+                            'ネメシス' => 'https://pbs.twimg.com/media/Gl6dJQhbYAI94qY?format=jpg&name=medium',
+                            'エルフ' => 'https://pbs.twimg.com/media/Gl6dPUXbEAE1HCr?format=jpg&name=medium',
+                            'ロイヤル' => 'https://pbs.twimg.com/media/Gl6dUvba4AEGHUE?format=jpg&name=medium',
+                            'ウィッチ' => 'https://pbs.twimg.com/media/Gl6dZoIbYAIp8Cb?format=jpg&name=medium',
+                            'ドラゴン' => 'https://pbs.twimg.com/media/Gl6dekbbYAMuH1A?format=jpg&name=medium',
+                            'ナイトメア' => 'https://pbs.twimg.com/media/Gl6doo_bEAAlacW?format=jpg&name=medium',
+                            'ビショップ' => 'https://pbs.twimg.com/media/Gl6dyWyawAAyuAi?format=jpg&name=medium',
+                        ];
 
-                            <!-- デッキ説明 -->
-                            @if ($deck->description)
-                                <h5>デッキ説明</h5>
-                                <p>{{ $deck->description }}</p>
-                            @else
-                                <p class="text-muted">このデッキには説明がありません。</p>
-                            @endif
+                        $classObjectPositions = [
+                            'ネメシス' => '10% 15px',
+                            'エルフ' => '5% 20px',
+                            'ロイヤル' => '10% 20px',
+                            'ウィッチ' => '10% 20px',
+                            'ドラゴン' => '10% 20px',
+                            'ナイトメア' => '45% 10px',
+                            'ビショップ' => '10% 20px',
+                        ];
 
-                            <!-- カード画像一覧 -->
-                            @if ($deck->cards->isEmpty())
-                                <p class="text-muted">このデッキにはカードがありません。</p>
-                            @else
-                                <div class="border p-3 rounded bg-light">
-                                    <div class="row row-cols-6 g-0">
-                                        @foreach ($deck->cards as $card)
-                                            @for ($i = 0; $i < $card->pivot->quantity; $i++)
-                                                <div class="col">
-                                                    <img src="{{ $card->image_url ?? asset('images/placeholder.png') }}"
-                                                        class="img-fluid d-block w-100"
-                                                        style="aspect-ratio: 3/4; object-fit: cover;"
-                                                        alt="{{ $card->name }}">
-                                                </div>
-                                            @endfor
-                                        @endforeach
+                        $leaderImage = $classImages[$deck->class] ?? null;
+                        $objectPosition = $classObjectPositions[$deck->class] ?? 'center';
+                        $totalCards = $deck->cards->sum('pivot.quantity');
+                    @endphp
+
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex align-items-center">
+
+                                <!-- リーダー画像 -->
+                                <div class="col-5">
+                                    <div class="card-image-crop" style="pointer-events: none;">
+                                        <img src="{{ $leaderImage }}" alt="{{ $deck->class }}"
+                                            style="object-position: {{ $objectPosition }};" />
+                                        <div class="card-image-name">{{ $deck->class }}</div>
                                     </div>
                                 </div>
-                            @endif
 
-                            <!-- カード一覧表 -->
-                            @if ($deck->cards->isEmpty())
-                                <p class="text-muted">このデッキにはカードがありません。</p>
-                            @else
-                                <div class="table-responsive border p-3 rounded bg-light">
-                                    <table class="table table-bordered table-striped mb-0">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>カード名</th>
-                                                <th>枚数</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($deck->cards as $card)
-                                                <tr>
-                                                    <td>{{ $card->name }}</td>
-                                                    <td>{{ $card->pivot->quantity }}枚</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                <!-- デッキ情報 -->
+                                <div class="col-8 col-md-9 ms-3">
+                                    <h5 class="card-title mb-1">{{ $deck->name }}</h5>
+                                    <p class="text-muted mb-3">作成日: {{ $deck->created_at->format('Y/m/d') }}</p>
+
+                                    <div class="d-flex gap-1">
+                                        <a href="{{ route('posts.osusumedeck.show', $deck->id) }}"
+                                            class="btn btn-primary btn-sm">詳細</a>
+
+                                    </div>
                                 </div>
-                            @endif
-                        </div>
-                    @endforeach
 
-                    <!-- 戻るボタン -->
-                    <div class="mt-4">
-                        <a href="{{ route('posts.osusumedeck') }}" class="btn btn-secondary">
-                            <i class="mdi mdi-arrow-left"></i> おすすめデッキ一覧に戻る
-                        </a>
+                            </div>
+                        </div>
                     </div>
+
+                @empty
+                    <div class="col-12">
+                        <p class="text-muted">おすすめデッキはまだ登録されていません。</p>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- ページネーション -->
+            <div class="row mt-4">
+                <div class="col-12 d-flex justify-content-center">
+                    {!! $recommendedDecks->links() !!}
+                </div>
+            </div>
+
+            <!-- トップに戻る -->
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <a href="{{ route('home') }}" class="btn btn-light">
+                        <i class="mdi mdi-arrow-left me-2"></i>トップページに戻る
+                    </a>
                 </div>
             </div>
         </div>

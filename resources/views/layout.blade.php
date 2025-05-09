@@ -109,8 +109,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <a href="">このサイトについて</a> | <a href="">利用規約</a> |
-                    <a href="">プライバシーポリシー</a> |
+                    <a href="{{ route('konosite') }}">このサイトについて</a> | <a href="{{ route('terms') }}">利用規約</a> |
+                    <a href="{{ route('privacy') }}">プライバシーポリシー</a> |
                     <a href="">Youtube</a>
                 </div>
                 <div class="col-12">©2025 SHIROMON</div>

@@ -13,15 +13,25 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $query=post::query();
+        $query = Post::query();
 
-        if($request->has('search') && $request->filled('search')) {
-            $searchKeyword=$request->input('search');
-
-            $query->where('title', 'like', '%' . $searchKeyword . '%');
+        if ($request->has('search') && $request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->input('search') . '%');
         }
 
-        $posts=$query->paginate(10);
+        // 並び替え処理
+        $sort = $request->input('sort', 'newest'); // デフォルトは newest
+
+        if ($sort === 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        } elseif ($sort === 'title') {
+            $query->orderBy('title', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc'); // newest
+        }
+
+        $posts = $query->paginate(10);
+
         return view('posts.index', compact('posts'));
     }
 
@@ -30,9 +40,11 @@ class PostController extends Controller
      */
     public function create()
     {
-        if(!Auth::check()) {
-            return redirect()->route('login');
+        // 管理者でない場合、リダイレクト
+        if (!auth()->user() || !auth()->user()->is_admin) {
+            return redirect()->route('home')->with('error', '管理者権限が必要です');
         }
+
         return view('posts.create');
     }
 
@@ -41,27 +53,31 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|max:255',
-            'content' =>'required'
+            'class' => 'required|in:ネメシス,エルフ,ロイヤル,ウィッチ,ドラゴン,ナイトメア,ビショップ',
+            'content' => 'required|string'
         ]);
 
-        Post::create([
-            'title' =>$request->title,
-            'content' =>$request->content,
-            'user_id' =>Auth::id()
-        ]);
-        return redirect()->route('posts.index');
+        $post = new Post();
+        $post->title = $validated['title'];
+        $post->class = $validated['class'];
+        $post->content = $validated['content'];
+        $post->user_id = auth()->id(); // 投稿者情報
+
+        $post->save();
+
+        return redirect()->route('posts.index')->with('success', '投稿が作成されました');
     }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
-    {    
-        $post=Post::with('comments.user')->findOrFail($id);
-        $comments=$post->comments()->with('user','likes')->paginate(10);
-        return view('posts.show',compact('post','comments'));
+    {
+        $post = Post::with('comments.user')->findOrFail($id);
+        $comments = $post->comments()->with('user', 'likes')->paginate(10);
+        return view('posts.show', compact('post', 'comments'));
     }
 
     /**
@@ -69,8 +85,8 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        $post=Post::findOrFail($id);
-        return view('posts.edit',compact('post'));
+        $post = Post::findOrFail($id);
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -80,14 +96,16 @@ class PostController extends Controller
     {
         $request->validate([
             'title' => 'required|max:255',
-            'content' =>'required'
+            'content' => 'required'
         ]);
-        $post=Post::findOrFail($id);
+        
+        $post = Post::findOrFail($id);
         $post->update([
-            'title' =>$request->title,
-            'content' =>$request->content
+            'title' => $request->title,
+            'content' => $request->content
         ]);
-        return redirect()->route('posts.show',['post'=>$post->id]);
+
+        return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
     /**
@@ -95,7 +113,7 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        $post=Post::findOrFail($id);
+        $post = Post::findOrFail($id);
         $post->delete();
         return redirect()->route('posts.index');
     }
