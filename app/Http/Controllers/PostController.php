@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
+use Purifier;
+
 
 class PostController extends Controller
 {
@@ -52,7 +54,11 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
+{
+    // 送信されたデータの内容をログに記録
+    \Log::info('Store request received:', $request->all());
+
+    try {
         $validated = $request->validate([
             'title' => 'required|max:255',
             'class' => 'required|in:ネメシス,エルフ,ロイヤル,ウィッチ,ドラゴン,ナイトメア,ビショップ',
@@ -63,12 +69,18 @@ class PostController extends Controller
         $post->title = $validated['title'];
         $post->class = $validated['class'];
         $post->content = $validated['content'];
-        $post->user_id = auth()->id(); // 投稿者情報
-
+        $post->user_id = auth()->id();
         $post->save();
 
         return redirect()->route('posts.index')->with('success', '投稿が作成されました');
+    } catch (\Exception $e) {
+        \Log::error('Store failed: ' . $e->getMessage());
+        return redirect()->back()->withInput()->with('error', '投稿の保存に失敗しました。');
     }
+}
+
+
+    
 
     /**
      * Display the specified resource.
@@ -86,35 +98,56 @@ class PostController extends Controller
     public function edit(string $id)
     {
         $post = Post::findOrFail($id);
+    
+        if (auth()->id() !== $post->user_id && !auth()->user()->is_admin) {
+            return redirect()->route('posts.index')->with('error', 'この投稿を編集する権限がありません。');
+        }
+    
         return view('posts.edit', compact('post'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(Request $request, string $id)
     {
+        $post = Post::findOrFail($id);
+    
+        if (auth()->id() !== $post->user_id && !auth()->user()->is_admin) {
+            return redirect()->route('posts.index')->with('error', 'この投稿を更新する権限がありません。');
+        }
+    
         $request->validate([
             'title' => 'required|max:255',
             'content' => 'required'
         ]);
-        
-        $post = Post::findOrFail($id);
+    
         $post->update([
             'title' => $request->title,
             'content' => $request->content
         ]);
-
-        return redirect()->route('posts.show', ['post' => $post->id]);
+    
+        return redirect()->route('posts.show', ['post' => $post->id])->with('success', '投稿が更新されました。');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(string $id)
     {
         $post = Post::findOrFail($id);
+    
+        if (auth()->id() !== $post->user_id && !auth()->user()->is_admin) {
+            return redirect()->route('posts.index')->with('error', 'この投稿を削除する権限がありません。');
+        }
+    
         $post->delete();
-        return redirect()->route('posts.index');
+    
+        return redirect()->route('posts.index')->with('success', '投稿が削除されました。');
     }
+
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images', 'public');
+            return response()->json(['image_url' => asset('storage/' . $path)]);
+        }
+
+        return response()->json(['error' => 'No image uploaded.'], 400);
+    }
+    
 }

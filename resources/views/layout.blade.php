@@ -25,6 +25,11 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style2.css') }}" rel="stylesheet">
 
+    <!--quillの導入-->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <!-- Custom styles can be pushed here -->
     @stack('styles') <!-- ここでスタイルの積み重ねを行う -->
 </head>

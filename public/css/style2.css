@@ -240,3 +240,10 @@ a {
     min-height: 3em; /* 2行分の高さを確保（行間含めて調整） */
     line-height: 1.5em; /* 行の高さを調整（デフォルトならこれでOK） */
 }
+#editor {
+    height: 300px; /* 必要に応じて調整 */
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 10px;
+}
