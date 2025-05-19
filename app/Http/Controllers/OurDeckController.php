@@ -8,54 +8,69 @@ use Illuminate\Http\Request;
 
 class OurDeckController extends Controller
 {
-    // みんなのデッキの一覧表示
-    public function index()
+    // 🔍 みんなのデッキの一覧表示
+    public function index(Request $request)
     {
-        // 公開されたデッキを取得
-        $publicDecks = Deck::with(['user', 'cards'])
-            ->where('share', true)
-            ->latest()
-            ->paginate(12);
+        $query = Deck::with(['user', 'cards', 'likes'])
+            ->where('share', true); // 公開されているデッキのみ表示
+
+        // 🔎 キーワード検索
+        if ($request->filled('keyword')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->keyword . '%')
+                  ->orWhere('description', 'like', '%' . $request->keyword . '%');
+            });
+        }
+
+        // ❤️「いいね」したデッキのみ表示（ログイン中のみ有効）
+        if ($request->filter === 'liked' && auth()->check()) {
+            $likedDeckIds = auth()->user()->likedDecks()->pluck('decks.id')->toArray();
+            $query->whereIn('id', $likedDeckIds);
+        }
+
+        // 🔃 並び替え（デフォルトは新着順）
+        if ($request->sort === 'likes') {
+            $query->withCount('likes')->orderBy('likes_count', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        // 📄 ページネーション（12件ずつ）
+        $publicDecks = $query->paginate(12)->appends($request->query());
 
         return view('posts.ourdeck', compact('publicDecks'));
     }
 
-    // デッキの詳細表示
+    // 📋 デッキの詳細表示
     public function show($id)
     {
         $deck = Deck::with(['cards', 'user'])->findOrFail($id);
 
         if (!$deck->share) {
-            abort(404); // 非公開のデッキは表示しない
+            abort(404); // 非公開デッキは見せない
         }
 
-        // デッキの説明を取得
-        $description = $deck->description;
-
-        return view('posts.ourdeck_show', compact('deck', 'description'));
+        return view('posts.ourdeck_show', compact('deck'));
     }
 
-    // デッキへの「いいね」をトグル
+    // ❤️「いいね」をトグル（追加 or 削除）
     public function toggleLike($id)
     {
         $deck = Deck::findOrFail($id);
 
-        // ユーザーがすでに「いいね」をしているか確認
-        $like = DeckLike::where('deck_id', $deck->id)
+        $existingLike = DeckLike::where('deck_id', $deck->id)
             ->where('user_id', auth()->id())
             ->first();
 
-        if ($like) {
-            // すでに「いいね」していれば取り消し
-            $like->delete();
+        if ($existingLike) {
+            $existingLike->delete(); // すでにいいねしてたら削除
         } else {
-            // 「いいね」していなければ新たに追加
             DeckLike::create([
                 'deck_id' => $deck->id,
                 'user_id' => auth()->id(),
             ]);
         }
 
-        return back();
+        return back(); // 元のページに戻る
     }
 }

@@ -41,7 +41,9 @@
     <!-- 新ナビゲーションバー -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('posts.index') }}">シャドバ(仮)</a>
+            <a class="navbar-brand" href="{{ route('posts.index') }}">
+                <img src="{{ asset('images/logo.webp') }}" alt="シャドバ村" height="40">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
                 aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

@@ -91,6 +91,14 @@
                         <textarea name="description" class="form-control" rows="4">{{ old('description', $deck->description) }}</textarea>
                         <button type="submit" class="btn btn-primary mt-2">保存</button>
                     </form>
+                    <div class="form-check mt-3">
+                        <input type="checkbox" name="is_recommended" id="is_recommended" class="form-check-input"
+                            {{ old('is_recommended', true) ? 'checked' : '' }}>
+                        <label for="is_recommended" class="form-check-label">
+                            おすすめデッキに掲載を許可する
+                        </label>
+                    </div>
+
 
                     <div class="mt-4">
                         <a href="{{ route('posts.yourdeck') }}" class="btn btn-secondary">

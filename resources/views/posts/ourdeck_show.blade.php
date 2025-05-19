@@ -27,8 +27,6 @@
                     <p class="text-muted">作成者: {{ $deck->user->name }}</p>
                     <p class="text-muted">作成日: {{ $deck->created_at->format('Y/m/d') }}</p>
 
-
-
                     <!-- カード画像一覧 -->
                     <h4 class="mt-4">カード画像</h4>
                     @if ($deck->cards->isEmpty())
@@ -73,15 +71,16 @@
                             </table>
                         </div>
                     @endif
+
                     <!-- デッキ説明 -->
-                    @if ($description)
+                    @if ($deck->description)
                         <div class="mt-4 card shadow-sm mb-4">
                             <div class="card-header bg-primary text-white">
                                 <i class="mdi mdi-comment-text-outline me-2"></i>
                                 <strong>デッキ説明</strong>
                             </div>
                             <div class="card-body bg-light">
-                                <p class="text-black mb-0" style="font-size: 1.1rem;">{{ $description }}</p>
+                                <p class="text-black mb-0" style="font-size: 1.1rem;">{{ $deck->description }}</p>
                             </div>
                         </div>
                     @else

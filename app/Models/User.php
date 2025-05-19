@@ -53,4 +53,14 @@ class User extends Authenticatable
     return $this->hasMany(\App\Models\Deck::class);
 }
 
+public function isAdmin()
+{
+    return $this->is_admin; // is_admin カラムが存在する前提
+}
+
+public function likedDecks()
+{
+    return $this->belongsToMany(\App\Models\Deck::class, 'deck_likes', 'user_id', 'deck_id')->withTimestamps();
+}
+
 }

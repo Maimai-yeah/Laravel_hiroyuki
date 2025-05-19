@@ -58,13 +58,15 @@ Route::middleware('auth')->group(function () {
 //皆のデッキのルーティング
 Route::get('/ourdecks', [OurDeckController::class, 'index'])->name('posts.ourdeck');
 Route::get('/ourdeck/{id}', [OurDeckController::class, 'show'])->name('ourdeck.show');
+
 // routes/web.php
 // 共有を取り消す
 Route::post('/yourdeck/{id}/unshare', [YourDeckController::class, 'unshareDeck'])->name('yourdeck.unshare');
 Route::middleware('auth')->group(function () {
-    // デッキ詳細ページで「いいね」をトグル
-    Route::post('/deck/{id}/like', [OurDeckController::class, 'toggleLike'])->name('deck.toggleLike');
+    // デッキ詳細ページで「いいね」をトグル（ルート名を変更）
+    Route::post('/deck/{id}/like', [OurDeckController::class, 'toggleLike'])->name('ourdeck.like');
 });
+
 
 Route::middleware('auth')->group(function () {
     // おすすめデッキ一覧

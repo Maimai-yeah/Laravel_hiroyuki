@@ -46,6 +46,30 @@
                             </div>
                         </div>
                     @endif
+                    <!-- ✅ カード一覧（テーブル）追加 -->
+                    <h4 class="mt-4">カード一覧</h4>
+                    @if ($deck->cards->isEmpty())
+                        <p class="text-muted">このデッキにはカードがありません。</p>
+                    @else
+                        <div class="table-responsive border p-3 rounded bg-light">
+                            <table class="table table-bordered table-striped mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>カード名</th>
+                                        <th>枚数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($deck->cards as $card)
+                                        <tr>
+                                            <td>{{ $card->name }}</td>
+                                            <td>{{ $card->pivot->quantity }}枚</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
 
                     <!-- デッキ説明 -->
                     @if ($deck->description)

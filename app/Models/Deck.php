@@ -37,4 +37,10 @@ class Deck extends Model
     {
         return $this->hasMany(DeckComment::class);
     }
+    // Deck.php
+public function likedUsers()
+{
+    return $this->belongsToMany(\App\Models\User::class, 'deck_likes', 'deck_id', 'user_id')->withTimestamps();
+}
+
 }

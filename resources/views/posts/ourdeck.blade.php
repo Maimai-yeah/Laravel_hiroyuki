@@ -3,6 +3,7 @@
 @section('content')
     <main class="main">
         <div class="container mt-4">
+
             <!-- パンくずリスト -->
             <div class="row">
                 <div class="col-12">
@@ -21,14 +22,31 @@
                         <span>みんなのデッキ</span>
                         <span class="ms-3 flex-grow-1 d-none d-md-block bg-light" style="height: 8px;"></span>
                     </h1>
-                    <p style="color: #6c757d; font-size: 14px; font-style: italic; margin-bottom: 0;">
-                        みんなが作ったデッキを見てみましょう。
-                    </p>
-                    <p style="color: #6c757d; font-size: 14px; font-style: italic; margin-top: 0; margin-bottom: 0;">
-                        気に入ったデッキはいいねしてみましょう。
-                    </p>
+                    <p class="text-muted fst-italic mb-0">みんなが作ったデッキを見てみましょう。</p>
+                    <p class="text-muted fst-italic mt-0 mb-0">気に入ったデッキはいいねしてみましょう。</p>
                 </div>
             </div>
+
+
+
+            <!-- 検索フォーム -->
+            <form method="GET" action="{{ route('posts.ourdeck') }}" class="mb-4 row g-2 align-items-center">
+
+                <div class="col-md-6">
+                    <input type="text" name="keyword" value="{{ request('keyword') }}" class="form-control"
+                        placeholder="デッキ名で検索">
+                </div>
+                <div class="col-md-4">
+                    <select name="sort" class="form-select">
+                        <option value="">並び替え</option>
+                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>新着順</option>
+                        <option value="likes" {{ request('sort') == 'likes' ? 'selected' : '' }}>いいね順</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">検索</button>
+                </div>
+            </form>
 
             <!-- デッキ一覧 -->
             <div class="row">
@@ -66,39 +84,23 @@
                                         <div class="card-image-name">{{ $deck->class }}</div>
                                     </div>
                                 </div>
-
                                 <div class="col-8 col-md-9 ms-3">
                                     <h5 class="card-title mb-1">{{ $deck->name }}</h5>
                                     <p class="mb-1 text-muted small">作者: {{ $deck->user->name }}</p>
                                     <p class="text-muted mb-3">作成日: {{ $deck->created_at->format('Y/m/d') }}</p>
-                                    <a href="{{ route('ourdeck.show', $deck->id) }}" class="btn btn-primary btn-sm">
-                                        詳細
-                                    </a>
+                                    <a href="{{ route('ourdeck.show', $deck->id) }}" class="btn btn-primary btn-sm">詳細</a>
 
-                                    <!-- いいねボタン -->
                                     @if (auth()->check())
-                                        @php
-                                            $liked = $deck->isLikedByUser(auth()->user()->id);
-                                        @endphp
-
-                                        <form action="{{ route('deck.toggleLike', $deck->id) }}" method="POST"
-                                            class="d-inline-block" id="like-form-{{ $deck->id }}">
+                                        @php $liked = $deck->isLikedByUser(auth()->id()); @endphp
+                                        <form action="{{ route('ourdeck.like', $deck->id) }}" method="POST"
+                                            class="d-inline-block mt-2 like-form" id="like-form-{{ $deck->id }}">
                                             @csrf
-                                            <div class="d-flex align-items-center">
-                                                @if ($liked)
-                                                    <button type="submit"
-                                                        class="btn btn-danger btn-sm mt-2 like-btn liked">
-                                                        <i class="mdi mdi-heart me-2"></i>
-                                                    </button>
-                                                @else
-                                                    <button type="submit" class="btn btn-light btn-sm mt-2 like-btn">
-                                                        <i class="mdi mdi-heart-outline me-2"></i>
-                                                    </button>
-                                                @endif
-                                                <!-- いいね数も一緒に表示 -->
-                                                <span class="ms-2 like-count"
-                                                    id="like-count-{{ $deck->id }}">{{ $deck->likes->count() }}</span>
-                                            </div>
+                                            <button type="submit"
+                                                class="btn btn-sm like-btn {{ $liked ? 'btn-danger liked' : 'btn-light' }}">
+                                                <i class="mdi {{ $liked ? 'mdi-heart' : 'mdi-heart-outline' }} me-2"></i>
+                                            </button>
+                                            <span class="ms-2 like-count"
+                                                id="like-count-{{ $deck->id }}">{{ $deck->likes->count() }}</span>
                                         </form>
                                     @else
                                         <p class="text-muted mt-2">いいねをするにはログインしてください。</p>
@@ -107,7 +109,6 @@
                             </div>
                         </div>
                     </div>
-
                 @empty
                     <div class="col-12">
                         <p class="text-muted">公開されているデッキはまだありません。</p>
@@ -136,41 +137,38 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
-                // いいねボタンのクリックイベント
-                $('form[id^="like-form-"]').on('submit', function(event) {
-                    event.preventDefault(); // フォームのデフォルトの送信をキャンセル
+                $('form.like-form').on('submit', function(event) {
+                    event.preventDefault();
 
-                    var form = $(this);
-                    var formData = form.serialize(); // フォームデータをシリアライズ
+                    const form = $(this);
+                    const formData = form.serialize();
 
-                    $.ajax({
-                        url: form.attr('action'),
-                        method: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            // いいね数の更新
-                            var likeCount = response.likeCount;
-                            var deckId = response.deckId;
+                    $.post(form.attr('action'), formData)
+                        .done(function(response) {
+                            const {
+                                deckId,
+                                likeCount,
+                                liked
+                            } = response;
 
+                            // 数値更新
                             $('#like-count-' + deckId).text(likeCount);
 
-                            // ボタンの状態を更新
-                            if (response.liked) {
-                                form.find('button').removeClass('btn-light').addClass('btn-danger');
-                                form.find('i').removeClass('mdi-heart-outline').addClass(
-                                    'mdi-heart');
-                                form.find('button').text('いいね');
+                            // ボタン状態更新
+                            const button = form.find('button.like-btn');
+                            const icon = button.find('i');
+
+                            if (liked) {
+                                button.removeClass('btn-light').addClass('btn-danger');
+                                icon.removeClass('mdi-heart-outline').addClass('mdi-heart');
                             } else {
-                                form.find('button').removeClass('btn-danger').addClass('btn-light');
-                                form.find('i').removeClass('mdi-heart').addClass(
-                                    'mdi-heart-outline');
-                                form.find('button').text('いいね');
+                                button.removeClass('btn-danger').addClass('btn-light');
+                                icon.removeClass('mdi-heart').addClass('mdi-heart-outline');
                             }
-                        },
-                        error: function() {
+                        })
+                        .fail(function() {
                             alert('エラーが発生しました');
-                        }
-                    });
+                        });
                 });
             });
         </script>

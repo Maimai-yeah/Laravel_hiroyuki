@@ -85,17 +85,18 @@ public function updateDescription(Request $request, $id)
     ]);
 
     try {
-        // デッキの説明を更新
+        // 説明とおすすめ公開設定の更新
         $deck->description = $request->input('description');
+        $deck->is_recommended = $request->has('is_recommended'); // ←ここを追加
+
         $deck->save();
 
-        // 保存成功メッセージをフラッシュセッションに設定
         return redirect()->route('yourdeck.show', $deck->id)->with('success', '保存に成功しました！');
     } catch (\Exception $e) {
-        // 保存失敗時のエラーメッセージをフラッシュセッションに設定
         return redirect()->route('yourdeck.show', $deck->id)->with('error', '保存に失敗しました');
     }
 }
+
 
 
 
