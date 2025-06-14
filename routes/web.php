@@ -13,6 +13,8 @@ use App\Http\Controllers\OsusumeDeckController;
 use App\Http\Controllers\DeckCommentController;
 use App\Http\Controllers\ContactController;
 use App\Models\Like;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
 
 Route::get('/', [PostController::class, 'index'])->name('home');
 
@@ -103,3 +105,20 @@ Route::post('/contact', [ContactController::class, 'submit'])->name('contact.sub
 //quillの画像挿入
 Route::post('/posts/upload-image', [PostController::class, 'uploadImage'])->name('posts.uploadImage');
 
+//サイトマップ
+Route::get('/sitemap.xml', function () {
+    $sitemap = Sitemap::create()
+        ->add(Url::create('/'))              // トップページ
+        ->add(Url::create('/posts'))         // 投稿一覧ページ
+        ->add(Url::create('/login'))         // ログインページ
+        ->add(Url::create('/register'));     // 新規登録ページ
+
+    return $sitemap->toResponse(request());
+});
+
+Route::get('/robots.txt', function () {
+    return response(
+        "User-agent: *\nDisallow:\n\nSitemap: " . url('/sitemap.xml'),
+        200
+    )->header('Content-Type', 'text/plain');
+});

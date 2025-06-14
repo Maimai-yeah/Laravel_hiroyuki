@@ -47,24 +47,29 @@ class CardlistController extends Controller
 
 
     public function getCardInfo($id)
-    {
-        $card = Card::find($id);
+{
+    $card = Card::find($id);
 
-        if ($card) {
-            return response()->json([
-                'name' => $card->name,
-                'cost' => $card->cost,
-                'attack' => $card->attack,
-                'hp' => $card->hp,
-                'class'=>$card->class,
-                'rarity'=>$card->rarity,
-                'version' => $card->version,
-                'effect' => $card->effect,
-                'evolved_name' => $card->evolved_name,
-                'image_url' => $card->image_url,
-            ]);
-        } else {
-            return response()->json(['error' => 'カードが見つかりませんでした'], 404);
-        }
+    if ($card) {
+        // 画像のパスを組み立てる（public/images/cards/クラス/ファイル名）
+        $imagePath = asset('images/cards/' . $card->class . '/' . $card->image_url);
+
+        return response()->json([
+            'name' => $card->name,
+            'cost' => $card->cost,
+            'attack' => $card->attack,
+            'hp' => $card->hp,
+            'class' => $card->class,
+            'rarity' => $card->rarity,
+            'version' => $card->version,
+            'effect' => $card->effect,
+            'evolved_name' => $card->evolved_name,
+            'image_url' => $imagePath, // 画像のフルURLを返す
+        ]);
+    } else {
+        return response()->json(['error' => 'カードが見つかりませんでした'], 404);
     }
+}
+
+
 }

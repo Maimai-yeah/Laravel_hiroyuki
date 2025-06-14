@@ -27,7 +27,6 @@
                 <div class="row">
                     <div class="col-12 col-lg-7 col-xl-8">
                         <div class="widget-box mt-4 mb-4">
-                            <!-- widget-boxとかいう謎の箱。これの中身に色んなjs詰まってたら嫌だなぁ -->
                             <h2
                                 class="fs-4 pb-2 mb-3 border border-2 border-top-0 border-start-0 border-end-0 border-warning">
                                 リーダーを選択してください
@@ -41,103 +40,79 @@
                                     <div class="card-item-area">
                                         <div class="card-item-area-inner">
                                             <div class="row gx-2 gy-3">
-                                                <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ネメシス']) }}"
-                                                        class="card-image-link">
-                                                        <div class="card-image-crop">
-                                                            <img src="https://pbs.twimg.com/media/Gl6dJQhbYAI94qY?format=jpg&name=medium"
-                                                                alt="ネメシス" style="object-position: 10% 15px;" />
-                                                            <div class="card-image-name">ネメシス</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
+                                                @php
+                                                    $leaders = [
+                                                        [
+                                                            'name' => 'ネメシス',
+                                                            'image' => 'nemesis.jpg',
+                                                            'position' => '10% 15px',
+                                                        ],
+                                                        [
+                                                            'name' => 'エルフ',
+                                                            'image' => 'elf.jpg',
+                                                            'position' => '5% 20px',
+                                                        ],
+                                                        [
+                                                            'name' => 'ロイヤル',
+                                                            'image' => 'royal.jpg',
+                                                            'position' => '10% 20px',
+                                                        ],
+                                                        [
+                                                            'name' => 'ウィッチ',
+                                                            'image' => 'witch.jpg',
+                                                            'position' => '10% 20px',
+                                                        ],
+                                                        [
+                                                            'name' => 'ドラゴン',
+                                                            'image' => 'dragon.jpg',
+                                                            'position' => '10% 20px',
+                                                        ],
+                                                        [
+                                                            'name' => 'ナイトメア',
+                                                            'image' => 'nightmare.jpg',
+                                                            'position' => '45% 10px',
+                                                        ],
+                                                        [
+                                                            'name' => 'ビショップ',
+                                                            'image' => 'bishop.jpg',
+                                                            'position' => '10% 20px',
+                                                        ],
+                                                    ];
+                                                @endphp
 
-
-                                                <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <a href="{{ route('posts.decksimulator', ['class' => 'エルフ']) }}">
-                                                        <div class="card-image-crop">
-                                                            <img src="https://pbs.twimg.com/media/Gl6dPUXbEAE1HCr?format=jpg&name=medium"
-                                                                alt="エルフ" style="object-position: 5% 20px;" />
-                                                            <div class="card-image-name">エルフ</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-
-                                                <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ロイヤル']) }}">
-                                                        <div class="card-image-crop">
-                                                            <img src="https://pbs.twimg.com/media/Gl6dUvba4AEGHUE?format=jpg&name=medium"
-                                                                alt="ロイヤル" style="object-position: 10% 20px;" />
-                                                            <div class="card-image-name">ロイヤル</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-
-                                                <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ウィッチ']) }}">
-                                                        <div class="card-image-crop">
-                                                            <img src="https://pbs.twimg.com/media/Gl6dZoIbYAIp8Cb?format=jpg&name=medium"
-                                                                alt="ウィッチ" style="object-position: 10% 20px;" />
-                                                            <div class="card-image-name">ウィッチ</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-
-                                                <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ドラゴン']) }}">
-                                                        <div class="card-image-crop">
-                                                            <img src="https://pbs.twimg.com/media/Gl6dekbbYAMuH1A?format=jpg&name=medium"
-                                                                alt="ドラゴン" style="object-position: 10% 20px;" />
-                                                            <div class="card-image-name">ドラゴン</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-
-                                                <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ナイトメア']) }}">
-                                                        <div class="card-image-crop">
-                                                            <img src="https://pbs.twimg.com/media/Gl6doo_bEAAlacW?format=jpg&name=medium"
-                                                                alt="ナイトメア" style="object-position: 45% 10px;" />
-                                                            <div class="card-image-name">ナイトメア</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-
-                                                <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <a href="{{ route('posts.decksimulator', ['class' => 'ビショップ']) }}">
-                                                        <div class="card-image-crop">
-                                                            <img src="https://pbs.twimg.com/media/Gl6dyWyawAAyuAi?format=jpg&name=medium"
-                                                                alt="ビショップ" style="object-position: 10% 20px;" />
-                                                            <div class="card-image-name">ビショップ</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
+                                                @foreach ($leaders as $leader)
+                                                    <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                                                        <a href="{{ route('posts.decksimulator', ['class' => $leader['name']]) }}"
+                                                            class="card-image-link">
+                                                            <div class="card-image-crop">
+                                                                <img src="{{ asset('images/leaders/' . $leader['image']) }}"
+                                                                    alt="{{ $leader['name'] }}"
+                                                                    style="object-position: {{ $leader['position'] }};" />
+                                                                <div class="card-image-name">{{ $leader['name'] }}</div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-
-
-
-
                             <div class="card-list-modal"></div>
-                            <!--なんだこれ-->
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="d-flex justify-content-center align-items-center">
-                    <a href="{{ route('home') }}" class="btn btn-light mb-4">
-                        <i class="mdi mdi-arrow-left me-2">トップページに戻る</i>
-                    </a>
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <a href="{{ route('home') }}" class="btn btn-light mb-4">
+                            <i class="mdi mdi-arrow-left me-2">トップページに戻る</i>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </main>
 @endsection

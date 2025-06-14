@@ -80,9 +80,6 @@
                             <p>シャドウバースビヨンドの考察・ファンサイトです。</p>
                             <p>世界中の人たちと色々なデッキを共有することが出来ます。</p>
                             <p>また、シャドバに関する記事も載せています。</p>
-                            <p>
-                                (デッキ共有の他に、一人回しやドローシミュレーターも実装予定です。)
-                            </p>
                         </div>
                         <div class="main-articles">
                             <h3 class="newer-article">最新記事</h3>
@@ -99,13 +96,17 @@
     @endauth
 
     <form method="GET" action="{{ route('posts.index') }}" class="mb-4">
-        <div class="d-flex align-items-center gap-2">
-            <label for="sort" class="form-label mb-0">並び替え:</label>
-            <select name="sort" id="sort" class="form-select w-auto" onchange="this.form.submit()">
-                <option value="newest" {{ request('sort', 'newest') == 'newest' ? 'selected' : '' }}>新しい順</option>
-                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>古い順</option>
-                <option value="title" {{ request('sort') == 'title' ? 'selected' : '' }}>タイトル順</option>
-            </select>
+        <div class="row g-2 align-items-center">
+            <div class="col-auto">
+                <label for="sort" class="col-form-label">並び替え:</label>
+            </div>
+            <div class="col-auto">
+                <select name="sort" id="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="newest" {{ request('sort', 'newest') == 'newest' ? 'selected' : '' }}>新しい順</option>
+                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>古い順</option>
+                    <option value="title" {{ request('sort') == 'title' ? 'selected' : '' }}>タイトル順</option>
+                </select>
+            </div>
             <input type="hidden" name="search" value="{{ request('search') }}">
         </div>
     </form>
@@ -114,13 +115,13 @@
         @foreach ($posts as $post)
             @php
                 $classImages = [
-                    'ネメシス' => 'https://pbs.twimg.com/media/Gl6dJQhbYAI94qY?format=jpg&name=medium',
-                    'エルフ' => 'https://pbs.twimg.com/media/Gl6dPUXbEAE1HCr?format=jpg&name=medium',
-                    'ロイヤル' => 'https://pbs.twimg.com/media/Gl6dUvba4AEGHUE?format=jpg&name=medium',
-                    'ウィッチ' => 'https://pbs.twimg.com/media/Gl6dZoIbYAIp8Cb?format=jpg&name=medium',
-                    'ドラゴン' => 'https://pbs.twimg.com/media/Gl6dekbbYAMuH1A?format=jpg&name=medium',
-                    'ナイトメア' => 'https://pbs.twimg.com/media/Gl6doo_bEAAlacW?format=jpg&name=medium',
-                    'ビショップ' => 'https://pbs.twimg.com/media/Gl6dyWyawAAyuAi?format=jpg&name=medium',
+                    'ネメシス' => asset('images/leaders/nemesis.jpg'),
+                    'エルフ' => asset('images/leaders/elf.jpg'),
+                    'ロイヤル' => asset('images/leaders/royal.jpg'),
+                    'ウィッチ' => asset('images/leaders/witch.jpg'),
+                    'ドラゴン' => asset('images/leaders/dragon.jpg'),
+                    'ナイトメア' => asset('images/leaders/nightmare.jpg'),
+                    'ビショップ' => asset('images/leaders/bishop.jpg'),
                 ];
 
                 $objectPositions = [
@@ -133,7 +134,7 @@
                     'ビショップ' => '10% 20px',
                 ];
 
-                $leaderImage = $classImages[$post->class] ?? 'https://via.placeholder.com/300x180?text=No+Image';
+                $leaderImage = $classImages[$post->class] ?? asset('images/leaders/default.jpg');
                 $objectPosition = $objectPositions[$post->class] ?? 'center';
             @endphp
 

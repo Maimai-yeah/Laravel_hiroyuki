@@ -25,7 +25,7 @@ class ContactController extends Controller
         Mail::raw(
             "お名前: {$validated['name']}\nメールアドレス: {$validated['email']}\n\nお問い合わせ内容:\n{$validated['message']}",
             function ($message) use ($validated) {
-                $message->to('your-admin@example.com') // 管理者宛てメールアドレスに変更
+                $message->to('ryo.fith@gmail.com') // 管理者宛てメールアドレスに変更
                         ->subject('【お問い合わせ】シャドバ（仮）からのメッセージ');
             }
         );
