@@ -51,8 +51,9 @@ class CardlistController extends Controller
     $card = Card::find($id);
 
     if ($card) {
-        // 画像のパスを組み立てる（public/images/cards/クラス/ファイル名）
-        $imagePath = asset('images/cards/' . $card->class . '/' . $card->image_url);
+        // 画像のパスを組み立てる（public/images/クラス/ファイル名）
+        $imagePath = asset('images/' . $card->class_en . '/' . $card->image_url);
+
 
         return response()->json([
             'name' => $card->name,
@@ -64,12 +65,11 @@ class CardlistController extends Controller
             'version' => $card->version,
             'effect' => $card->effect,
             'evolved_name' => $card->evolved_name,
-            'image_url' => $imagePath, // 画像のフルURLを返す
+            'image_url' => $imagePath,  // フルパスを返す
         ]);
     } else {
         return response()->json(['error' => 'カードが見つかりませんでした'], 404);
     }
 }
-
 
 }
