@@ -37,7 +37,7 @@
                         <div class="widget-box mt-4 mb-4">
                             <h2
                                 class="fs-4 pb-2 mb-3 border border-2 border-top-0 border-start-0 border-end-0 border-warning">
-                                カードリスト一覧
+                                カードリスト一覧 けつけつおけつうおおおおおおおお
                             </h2>
 
                             <form action="{{ route('posts.cardlist') }}" method="GET">
@@ -89,7 +89,6 @@
                                                     <p>{{ $card->class_en }}</p>
                                                     <p>{{ asset('images/' . $card->class_en . '/' . $card->image_url) }}
                                                     </p>
-
                                                     <div class="mt-2">
                                                         <!-- <p>{{ $card->name }}</p> -->
                                                     </div>
