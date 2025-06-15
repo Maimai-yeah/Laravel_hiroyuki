@@ -141,8 +141,9 @@
                                             <div class="card-item-area-inner">
                                                 <div class="card-item-element">
                                                     <figure>
-                                                        <img src="{{ $card->image_url }}" alt="{{ $card->name }}"
-                                                            class="img-fluid" />
+                                                        <img src="{{ asset('images/' . $card->class_en . '/' . $card->image_url) }}"
+                                                            alt="{{ $card->name }}" class="img-fluid" />
+
                                                     </figure>
                                                     <div class="mt-2">
                                                         {{-- 任意の詳細表示 --}}
