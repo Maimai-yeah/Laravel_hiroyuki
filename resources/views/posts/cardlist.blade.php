@@ -85,6 +85,11 @@
                                                         <img src="{{ asset('images/' . $card->class_en . '/' . $card->image_url) }}"
                                                             alt="{{ $card->name }}" class="img-fluid" />
                                                     </figure>
+                                                    <p>{{ $card->class }}</p>
+                                                    <p>{{ $card->class_en }}</p>
+                                                    <p>{{ asset('images/' . $card->class_en . '/' . $card->image_url) }}
+                                                    </p>
+
                                                     <div class="mt-2">
                                                         <!-- <p>{{ $card->name }}</p> -->
                                                     </div>
@@ -110,6 +115,7 @@
                     <div class="d-flex justify-content-center align-items-center">
                         <a href="{{ route('home') }}" class="btn btn-light mb-4">
                             <i class="mdi mdi-arrow-left me-2">トップページに戻る</i>
+
                         </a>
                     </div>
                 </div>
