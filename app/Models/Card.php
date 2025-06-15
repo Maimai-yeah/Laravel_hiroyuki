@@ -25,5 +25,22 @@ class Card extends Model
                 ->withPivot('quantity')
                 ->withTimestamps();
 }
+// Card.php の中に追加
+public function getClassEnAttribute()
+{
+    $map = [
+        'ニュートラル' => 'neutral',
+        'エルフ' => 'elf',
+        'ロイヤル' => 'royal',
+        'ウィッチ' => 'witch',
+        'ドラゴン' => 'dragon',
+        'ナイトメア' => 'nightmare',
+        'ビショップ' => 'bishop',
+        'ネメシス' => 'nemesis',
+    ];
+
+    return $map[$this->class] ?? $this->class;
+}
+
 
 }
